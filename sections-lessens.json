@@ -12,186 +12,328 @@
           "sectionDesc": "تعلّم أسماء حيوانات شائعة",
           "sectionIcon": "🐾",
           "lessons": [
-       {
-  "lessonId": "animals_basics_alltypes",
-  "title": "الحيوانات",
-  "desc": "التعرّف على الحيوانات وأصواتها",
-  "videoUrl": "vidioes/تعليم الأطفال النطق_ حيوانات المزرعة(480P).mp4",
-  "items": [
-    {
-      "itemId": "cow",
-      "front": {
-        "text": "بقرة",
-        "imageUrl": "cowFront.jpeg",
-        "audioUrl": "sounds/cow-mooing-343423.mp3"
-      },
-      "back": {
-        "text": "بقرة",
-        "desc": "البقرة تعيش في المزرعة",
-        "imageUrl": "images/animals/cow-photo.webp",
-        "videoUrl":  "vidioes/cow_eat.mp4"
-      }
-    },
-    {
-      "itemId": "sheep",
-      "front": {
-        "text": "خروف",
-        "imageUrl": "images/sheep.webp",
-        "audioUrl": "sounds/sheep_sound.mp3"
-      },
-      "back": {
-        "text": "خروف",
-        "desc": "الخروف حيوان صوفي",
-        "imageUrl": "images/animals/sheep-photo.webp",
-        "videoUrl": "vidioes/sheep_eat.mp4"
-      }
-    },
-    {
-      "itemId": "lion",
-      "front": {
-        "text": "أسد",
-        "imageUrl": "images/lion.jpeg",
-        "audioUrl": "sounds/lion_sound.mp3"
-      },
-      "back": {
-        "text": "أسد",
-        "desc": "الأسد يعيش في الغابة",
-        "imageUrl": "images/animals/lion-photo.webp",
-        "videoUrl": "vidioes/lion_eat.mp4"
-      }
-    }
-  ],
-  "interactive": {
-    "feedbackAudio": {
-      "correct": "sounds/the-correct-answer-33-183620.mp3",
-      "wrong": "sounds/wrong-answer-21-199825.mp3"
-    },
-    "availableQuestionTypes": [
-      "listen_choose",
-      "multiple_choice",
-      "match",
-      "drag_drop",
-      "build_construct",
-      "trace_write",
-      "coloring"
-    ],
-    "flowByItem": {
-      "cow": [
-        "q_listen_choose",
-        "q_match",
-        "q_drag_drop",
-        "q_build",
-        "q_trace",
-        "q_coloring"
-      ]
-    },
-    "questionBank": [
-      {
-        "id": "q_listen_choose",
-        "type": "listen_choose",
-        "prompt": {
-          "text": "استمع ثم اختر الحيوان",
-          "audioUrl": "sounds/lion_sound.mp3"
-        },
-        "choices": [
-          { "id": "cow", "text": "بقرة", "imageUrl":  "images/cow-eat.jpeg" },
-          { "id": "sheep", "text": "خروف", "imageUrl": "images/sheep.webp" },
-          { "id": "lion", "text": "أسد", "imageUrl": "images/lion.jpeg" }
-        ],
-        "answer": { "choiceId": "cow" }
-      },
-      {
-        "id": "q_match",
-        "type": "match",
-        "prompt": {
-          "text": "طابق الحيوان مع اسمه",
-          "audioUrl": "sounds/lion_sound.mp3"
-        },
-        "left": [
-          { "id": "l_cow", "imageUrl": "images/cow-eat.jpeg" },
-          { "id": "l_sheep", "imageUrl":  "images/sheep.webp" },
-          { "id": "l_lion", "imageUrl": "images/lion.jpeg" }
-        ],
-        "right": [
-          { "id": "r_cow", "text": "بقرة", "audioUrl": "sounds/lion_sound.mp3" },
-          { "id": "r_sheep", "text": "خروف", "audioUrl": "sounds/lion_sound.mp3" },
-          { "id": "r_lion", "text": "أسد", "audioUrl": "sounds/lion_sound.mp3" }
-        ],
-        "pairs": [
-          { "leftId": "l_cow", "rightId": "r_cow" },
-          { "leftId": "l_sheep", "rightId": "r_sheep" },
-          { "leftId": "l_lion", "rightId": "r_lion" }
-        ]
-      },
-      {
-        "id": "q_drag_drop",
-        "type": "drag_drop",
-        "prompt": {
-          "text": "ضع الكلمة تحت الصورة الصحيحة",
-          "audioUrl": "sounds/cow-mooing-343423.mp3"
-        },
-        "draggable": [
-          { "id": "d_cow", "text": "بقرة" },
-          { "id": "d_sheep", "text": "خروف" },
-          { "id": "d_lion", "text": "أسد" }
-        ],
-        "targets": [
-          { "id": "t_cow", "imageUrl": "images/cow-eat.jpeg" },
-          { "id": "t_sheep", "imageUrl": "images/sheep.webp" },
-          { "id": "t_lion", "imageUrl": "images/lion.jpeg" }
-        ],
-        "map": [
-          { "dragId": "d_cow", "targetId": "t_cow" },
-          { "dragId": "d_sheep", "targetId": "t_sheep" },
-          { "dragId": "d_lion", "targetId": "t_lion" }
-        ]
-      },
-      {
-        "id": "q_build",
-        "type": "build_construct",
-        "prompt": {
-          "text": "كوّن الكلمة",
-          "audioUrl":"sounds/cow-mooing-343423.mp3"
-        },
-        "tiles": [
-          { "id": "b1", "text": "ب" },
-          { "id": "b2", "text": "ق" },
-          { "id": "b3", "text": "ر" },
-          { "id": "b4", "text": "ة" }
-        ],
-        "answer": { "text": "بقرة" }
-      },
-      {
-        "id": "q_trace",
-        "type": "trace_write",
-        "prompt": {
-          "text": "اكتب كلمة بقرة",
-          "audioUrl":"sounds/cow-mooing-343423.mp3"
-        },
-        "trace": {
-          "text": "بقرة",
-          "svgUrl": "writing/cow.svg"
-        },
-        "canvas": { "width": 800, "height": 300 },
-        "minInkPixels": 5000
-      },
-      {
-        "id": "q_coloring",
-        "type": "coloring",
-        "prompt": {
-          "text": "لوّن داخل شكل الحيوان",
-          "audioUrl": "images/color_cow.jpeg"
-        },
-        "canvas": {
-          "baseImageUrl": "images/cow_coloring.PNG",
-          "maskImageUrl": "images/cow_coloring.PNG"
-        },
-        "successCriteria": { "coveragePercent": 0.6 }
-      }
-    ]
-  }
+            {
+              "lessonId": "animals_basics_alltypes",
+              "title": "الحيوانات",
+              "desc": "",
+              "videoUrl": "videos/pre/animals-basics.mp4",
+              "items": [
+                {
+                  "itemId": "cow",
+                  "front": {
+                    "text": "بقرة",
+                    "title": "حيوان المزرعة",
+                    "desc": "يعطينا الحليب",
+                    "imageUrl": "images/animals/cow.webp",
+                    "audioUrl": "https://example.com/audio/ar/animals/cow-word.mp3"
+                  },
+                  "back": {
+                    "text": "🐮",
+                    "title": "البقرة",
+                    "desc": "تعيش في المزرعة",
+                    "imageUrl": "images/animals/cow-photo.webp",
+                    "audioUrl": "https://example.com/audio/ar/animals/cow-sound.mp3"
+                  }
+                },
+                {
+                  "itemId": "sheep",
+                  "front": {
+                    "text": "خروف",
+                    "title": "حيوان صوفي",
+                    "desc": "يعطينا الصوف",
+                    "imageUrl": "images/animals/sheep.webp",
+                    "audioUrl": "https://example.com/audio/ar/animals/sheep-word.mp3"
+                  },
+                  "back": {
+                    "text": "🐑",
+                    "title": "الخروف",
+                    "desc": "صوته: مأمأة",
+                    "imageUrl": "images/animals/sheep-photo.webp",
+                    "audioUrl": "https://example.com/audio/ar/animals/sheep-sound.mp3"
+                  }
+                },
+                {
+                  "itemId": "lion",
+                  "front": {
+                    "text": "أسد",
+                    "title": "حيوان الغابة",
+                    "desc": "يُسمّى ملك الغابة",
+                    "imageUrl": "images/animals/lion.webp",
+                    "audioUrl": "https://example.com/audio/ar/animals/lion-word.mp3"
+                  },
+                  "back": {
+                    "text": "🦁",
+                    "title": "الأسد",
+                    "desc": "صوته: زئير",
+                    "imageUrl": "images/animals/lion-photo.webp",
+                    "audioUrl": "https://example.com/audio/ar/animals/lion-roar.mp3"
+                  }
+                }
+              ],
+              "interactive": {
+                "feedbackAudio": {
+                    "correct": "sounds/correct.mp3",
+                  "wrong": "sounds/wrong.mp3"
+                },
+                "availableQuestionTypes": [
+                  "multiple_choice",
+                  "listen_choose",
+                  "match",
+                  "drag_drop",
+                  "ordering",
+                  "classification",
+                  "coloring",
+                  "build_construct",
+                  "trace_write"
+                ],
+                "flowByItem": {
+                  "cow": [
+                    "an_q_match",
+                    "an_q_multiple_choice",
+                    "an_q_coloring",
+                    "an_q_listen_choose",
+                    "an_q_drag_drop",
+                    "an_q_ordering",
+                    "an_q_classification",
+                    "an_q_build_construct",
+                    "an_q_trace_write"
+                  ],
+                  "sheep": [
+                    "an_q_trace_write",
+                    "an_q_multiple_choice",
+                    "an_q_listen_choose",
+                    "an_q_match",
+                    "an_q_drag_drop",
+                    "an_q_ordering",
+                    "an_q_classification",
+                    "an_q_coloring",
+                    "an_q_build_construct"
+                  ],
+                  "lion": [
+                    "an_q_trace_write",
+                    "an_q_multiple_choice",
+                    "an_q_listen_choose",
+                    "an_q_match",
+                    "an_q_drag_drop",
+                    "an_q_ordering",
+                    "an_q_classification",
+                    "an_q_coloring",
+                    "an_q_build_construct"
+                  ]
+                },
+                "questionBank": [
+                  {
+                    "id": "an_q_trace_write",
+                    "type": "trace_write",
+                    "prompt": { "text": "اكتب كلمة: بقرة" },
+                    "trace": { "text": "بقرة", "svgUrl": "writing/cow.svg" },
+                    "canvas": { "width": 900, "height": 300 },
+                    "minInkPixels": 5400
+                  },
+                  {
+                    "id": "an_q_multiple_choice",
+                    "type": "multiple_choice",
+                    "prompt": {
+                      "text": "اختر الحيوان الذي يعطينا الحليب",
+                      "imageUrl": "images/animals/cow.webp",
+                      "audioUrl": "sounds/correct.mp3"
+                    },
+                    "choices": [
+                      {
+                        "id": "cow",
+                        "text": "بقرة",
+                        "imageUrl": "images/cow-eat.jpeg",
+                        "audioUrl": "sounds/cow-mooing-343423.mp3"
+                      },
+                      {
+                        "id": "sheep",
+                        "text": "خروف",
+                        "imageUrl": "images/sheep.webp",
+                        "audioUrl": "sounds/sheep_sound.mp3"
+                      },
+                      {
+                        "id": "lion",
+                        "text": "أسد",
+                        "imageUrl": "images/lion.jpeg",
+                        "audioUrl": "sounds/lion_sound.mp3"
+                      }
+                    ],
+                    "answer": { "choiceId": "cow" }
+                  },
+                  {
+                    "id": "an_q_listen_choose",
+                    "type": "listen_choose",
+                    "prompt": {
+                      "text": "استمع ثم اختر الحيوان",
+                      "imageUrl": "images/cow-eat.jpeg",
+                      "audioUrl": "sounds/cow-mooing-343423.mp3"
+                    },
+                    "choices": [
+                      {
+                        "id": "cow",
+                        "text": "بقرة",
+                        "imageUrl": "images/cow-eat.jpeg",
+                        "audioUrl": "sounds/cow-mooing-343423.mp3"
+                      },
+                      {
+                        "id": "sheep",
+                        "text": "خروف",
+                        "imageUrl": "images/sheep.webp",
+                        "audioUrl": "sounds/sheep_sound.mp3"
+                      },
+                      {
+                        "id": "lion",
+                        "text": "أسد",
+                        "imageUrl":"images/lion.jpeg",
+                        "audioUrl": "sounds/lion_sound.mp3"
+                      }
+                    ],
+                    "answer": { "choiceId": "cow" }
+                  },
+                  { 
+                      
+                    "id": "an_q_match",
+                    "type": "match",
+                    "prompt": {
+                      "text": "طابق الحيوان مع اسمه",
+                      "imageUrl": "images/ui/match.webp",
+                      "audioUrl":"sounds/cow-mooing-343423.mp3"
+                    },
+                    "left": [
+                      { "id": "l_cow", "text": "🐮", "imageUrl": "images/cow-eat.jpeg"},
+                      { "id": "l_sheep", "text": "🐑", "imageUrl": "images/sheep.webp" },
+                      { "id": "l_lion", "text": "🦁", "imageUrl": "images/lion.jpeg"}
+                    ],
+                    "right": [
+                      { "id": "r_cow", "text": "بقرة", "audioUrl": "sounds/cow-mooing-343423.mp3" },
+                      { "id": "r_sheep", "text": "خروف", "audioUrl": "sounds/sheep_sound.mp3" },
+                      { "id": "r_lion", "text": "أسد", "audioUrl": "sounds/lion_sound.mp3" }
+                    ],
+                    "pairs": [
+                      { "leftId": "l_cow", "rightId": "r_cow" },
+                      { "leftId": "l_sheep", "rightId": "r_sheep" },
+                      { "leftId": "l_lion", "rightId": "r_lion" }
+                    ]
+                  },
+                  {
+                    "id": "an_q_drag_drop",
+                    "type": "drag_drop",
+                    "prompt": {
+                      "text": "ضع الكلمة تحت الصورة الصحيحة",
+                      "imageUrl": "images/ui/drag.webp",
+                      "audioUrl": "sounds/correct.mp3"
+                    },
+                    "draggable": [
+                
+
+                      { "id": "d_cow", "text": "بقرة", "audioUrl": "sounds/cow-mooing-343423.mp3" },
+                      { "id": "d_sheep", "text": "خروف", "audioUrl": "sounds/sheep_sound.mp3" },
+                      { "id": "d_lion", "text": "أسد", "audioUrl": "sounds/lion_sound.mp3"  }
+                    ],
+                    "targets": [
+                      { "id": "t_cow", "label": "🐮", "imageUrl": "images/cow-eat.jpeg"},
+                      { "id": "t_sheep", "label": "🐑", "imageUrl":"images/sheep.webp" },
+                      { "id": "t_lion", "label": "🦁", "imageUrl":  "images/lion.jpeg" }
+                    ],
+                    "map": [
+                      { "dragId": "d_cow", "targetId": "t_cow" },
+                      { "dragId": "d_sheep", "targetId": "t_sheep" },
+                      { "dragId": "d_lion", "targetId": "t_lion" }
+                    ]
+                  },
+                  {
+                    "id": "an_q_ordering",
+                    "type": "ordering",
+                    "prompt": {
+                      "text": "رتّب الحيوانات حسب الحجم (الأكبر أولًا)",
+                      "imageUrl": "images/ui/order.webp",
+                      "audioUrl": "sounds/correct.mp3"
+                    },
+                    "tiles":[
+{
+  "id": "o_cow",
+  "text": "بقرة",
+  "imageUrl": "images/cow-eat.jpeg",
+  "audioUrl": "sounds/cow-mooing-343423.mp3"
+},
+{
+  "id": "o_lion",
+  "text": "أسد",
+  "imageUrl": "images/lion.jpeg",
+  "audioUrl": "sounds/lion_sound.mp3"
+},
+{
+  "id": "o_sheep",
+  "text": "خروف",
+  "imageUrl": "images/sheep.webp",
+  "audioUrl": "sounds/sheep_sound.mp3"
 }
 
+]
+,
+                    "answer": { "orderedIds": ["o_cow", "o_lion", "o_sheep"] }
+                  },
+                  {
+                    "id": "an_q_classification",
+                    "type": "classification",
+                    "prompt": {
+                      "text": "صنّف الحيوانات: مزرعة أم غابة أم سافانا",
+                      "imageUrl": "images/ui/box.webp",
+                      "audioUrl": "sounds/correct.mp3"
+                    },
+                    "categories": [
+                      { "id": "cat_farm", "label": "مزرعة" },
+                      { "id": "cat_forest", "label": "غابة" },
+                      { "id": "cat_savanna", "label": "سافانا" }
+                    ],
+                    "items": [
+                  { "id": "it_cow", "text": "بقرة", "imageUrl": "images/cow-eat.jpeg", "audioUrl": "sounds/cow-mooing-343423.mp3" },
+{ "id": "it_sheep", "text": "خروف", "imageUrl": "images/sheep.webp", "audioUrl": "sounds/sheep_sound.mp3" },
+{ "id": "it_lion", "text": "أسد", "imageUrl": "images/lion.jpeg", "audioUrl": "sounds/lion_sound.mp3" }
+
+                    ],
+                    "answer": {
+                      "map": [
+                        { "itemId": "it_cow", "categoryId": "cat_farm" },
+                        { "itemId": "it_sheep", "categoryId": "cat_farm" },
+                        { "itemId": "it_lion", "categoryId": "cat_savanna" }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "an_q_coloring",
+                    "type": "coloring",
+                    "prompt": {
+                      "text": "لوّن داخل شكل البقرة فقط",
+                      "imageUrl": "images/cow_coloring.PNG",
+                      "audioUrl":"sounds/correct.mp3"
+                    },
+                    "canvas": {
+                      "baseImageUrl": "images/cow_coloring.PNG",
+                      "maskImageUrl": "images/cow_coloring.PNG",
+                      "targetHintImageUrl": "images/cow_coloring.PNG"
+                    },
+                    "successCriteria": { "coveragePercent": 0.6 }
+                  },
+                  {
+                    "id": "an_q_build_construct",
+                    "type": "build_construct",
+                    "prompt": {
+                      "text": "كوّن كلمة: بقرة",
+                      "imageUrl": "images/ui/letters.webp",
+                      "audioUrl": "sounds/correct.mp3"
+                    },
+                    "tiles": [
+                      { "id": "b1", "text": "ب" },
+                      { "id": "b2", "text": "ق" },
+                      { "id": "b3", "text": "ر" },
+                      { "id": "b4", "text": "ة" }
+                    ],
+                    "answer": { "text": "بقرة" }
+                  }
+                ]
+              }
+            }
           ]
         },
         {
@@ -327,24 +469,9 @@
                       "audioUrl": "https://example.com/audio/ar/questions/shapes/q-sun-shape.mp3"
                     },
                     "choices": [
-                      {
-                        "id": "circle",
-                        "text": "دائرة",
-                        "imageUrl": "images/shapes/circle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3"
-                      },
-                      {
-                        "id": "square",
-                        "text": "مربع",
-                        "imageUrl": "images/shapes/square.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3"
-                      },
-                      {
-                        "id": "triangle",
-                        "text": "مثلث",
-                        "imageUrl": "images/shapes/triangle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3"
-                      }
+                      { "id": "circle", "text": "دائرة", "imageUrl": "images/shapes/circle.webp", "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3" },
+                      { "id": "square", "text": "مربع", "imageUrl": "images/shapes/square.webp", "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3" },
+                      { "id": "triangle", "text": "مثلث", "imageUrl": "images/shapes/triangle.webp", "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3" }
                     ],
                     "answer": { "choiceId": "circle" }
                   },
@@ -357,24 +484,9 @@
                       "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3"
                     },
                     "choices": [
-                      {
-                        "id": "triangle",
-                        "text": "🔺",
-                        "imageUrl": "images/shapes/triangle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3"
-                      },
-                      {
-                        "id": "circle",
-                        "text": "⚪",
-                        "imageUrl": "images/shapes/circle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3"
-                      },
-                      {
-                        "id": "square",
-                        "text": "⬜",
-                        "imageUrl": "images/shapes/square.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3"
-                      }
+                      { "id": "triangle", "text": "🔺", "imageUrl": "images/shapes/triangle.webp", "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3" },
+                      { "id": "circle", "text": "⚪", "imageUrl": "images/shapes/circle.webp", "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3" },
+                      { "id": "square", "text": "⬜", "imageUrl": "images/shapes/square.webp", "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3" }
                     ],
                     "answer": { "choiceId": "triangle" }
                   },
@@ -435,24 +547,9 @@
                       "audioUrl": "https://example.com/audio/ar/questions/shapes/q-order-corners.mp3"
                     },
                     "tiles": [
-                      {
-                        "id": "o_circle",
-                        "text": "⚪",
-                        "imageUrl": "images/shapes/circle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3"
-                      },
-                      {
-                        "id": "o_triangle",
-                        "text": "🔺",
-                        "imageUrl": "images/shapes/triangle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3"
-                      },
-                      {
-                        "id": "o_square",
-                        "text": "⬜",
-                        "imageUrl": "images/shapes/square.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3"
-                      }
+                      { "id": "o_circle", "text": "⚪", "imageUrl": "images/shapes/circle.webp", "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3" },
+                      { "id": "o_triangle", "text": "🔺", "imageUrl": "images/shapes/triangle.webp", "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3" },
+                      { "id": "o_square", "text": "⬜", "imageUrl": "images/shapes/square.webp", "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3" }
                     ],
                     "answer": { "orderedIds": ["o_circle", "o_triangle", "o_square"] }
                   },
@@ -469,24 +566,9 @@
                       { "id": "cat_corners_no", "label": "لا زوايا" }
                     ],
                     "items": [
-                      {
-                        "id": "it_circle",
-                        "text": "⚪",
-                        "imageUrl": "images/shapes/circle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3"
-                      },
-                      {
-                        "id": "it_square",
-                        "text": "⬜",
-                        "imageUrl": "images/shapes/square.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3"
-                      },
-                      {
-                        "id": "it_triangle",
-                        "text": "🔺",
-                        "imageUrl": "images/shapes/triangle.webp",
-                        "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3"
-                      }
+                      { "id": "it_circle", "text": "⚪", "imageUrl": "images/shapes/circle.webp", "audioUrl": "https://example.com/audio/ar/shapes/circle-word.mp3" },
+                      { "id": "it_square", "text": "⬜", "imageUrl": "images/shapes/square.webp", "audioUrl": "https://example.com/audio/ar/shapes/square-word.mp3" },
+                      { "id": "it_triangle", "text": "🔺", "imageUrl": "images/shapes/triangle.webp", "audioUrl": "https://example.com/audio/ar/shapes/triangle-word.mp3" }
                     ],
                     "answer": {
                       "map": [
@@ -502,7 +584,7 @@
                     "prompt": {
                       "text": "لوّن داخل شكل الدائرة فقط",
                       "imageUrl": "images/ui/color.webp",
-                      "audioUrl": "https://example.com/audio/ar/questions/shapes/q-color-circle.mp3"
+                      "audioUrl": "sounds/correct.mp3"
                     },
                     "canvas": {
                       "baseImageUrl": "images/coloring/circle-outline.webp",
@@ -517,7 +599,7 @@
                     "prompt": {
                       "text": "كوّن كلمة: مربع",
                       "imageUrl": "images/ui/letters.webp",
-                      "audioUrl": "https://example.com/audio/ar/questions/shapes/q-build-square.mp3"
+                      "audioUrl": "sounds/correct.mp3"
                     },
                     "tiles": [
                       { "id": "sb1", "text": "م" },
@@ -598,8 +680,8 @@
               ],
               "interactive": {
                 "feedbackAudio": {
-                  "correct": "https://example.com/audio/ui/correct.mp3",
-                  "wrong": "https://example.com/audio/ui/wrong.mp3"
+                  "correct": "sounds/correct.mp3",
+                  "wrong": "sounds/wrong.mp3"
                 },
                 "availableQuestionTypes": [
                   "multiple_choice",
@@ -662,27 +744,12 @@
                     "prompt": {
                       "text": "اختر اللون الأحمر",
                       "imageUrl": "images/ui/palette.webp",
-                      "audioUrl": "https://example.com/audio/ar/questions/colors/q-choose-red.mp3"
+                      "audioUrl": "sounds/correct.mp3"
                     },
                     "choices": [
-                      {
-                        "id": "red",
-                        "text": "🔴",
-                        "imageUrl": "images/colors/red.webp",
-                        "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3"
-                      },
-                      {
-                        "id": "blue",
-                        "text": "🔵",
-                        "imageUrl": "images/colors/blue.webp",
-                        "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3"
-                      },
-                      {
-                        "id": "yellow",
-                        "text": "🟡",
-                        "imageUrl": "images/colors/yellow.webp",
-                        "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3"
-                      }
+                      { "id": "red", "text": "🔴", "imageUrl": "images/colors/red.webp", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
+                      { "id": "blue", "text": "🔵", "imageUrl": "images/colors/blue.webp", "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3" },
+                      { "id": "yellow", "text": "🟡", "imageUrl": "images/colors/yellow.webp", "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3" }
                     ],
                     "answer": { "choiceId": "red" }
                   },
@@ -692,27 +759,12 @@
                     "prompt": {
                       "text": "استمع ثم اختر اللون الذي يُقال",
                       "imageUrl": "images/ui/ear.webp",
-                      "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3"
+                      "audioUrl": "sounds/correct.mp3"
                     },
                     "choices": [
-                      {
-                        "id": "blue",
-                        "text": "🔵",
-                        "imageUrl": "images/colors/blue.webp",
-                        "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3"
-                      },
-                      {
-                        "id": "red",
-                        "text": "🔴",
-                        "imageUrl": "images/colors/red.webp",
-                        "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3"
-                      },
-                      {
-                        "id": "yellow",
-                        "text": "🟡",
-                        "imageUrl": "images/colors/yellow.webp",
-                        "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3"
-                      }
+                      { "id": "blue", "text": "🔵", "imageUrl": "images/colors/blue.webp", "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3" },
+                      { "id": "red", "text": "🔴", "imageUrl": "images/colors/red.webp", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
+                      { "id": "yellow", "text": "🟡", "imageUrl": "images/colors/yellow.webp", "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3" }
                     ],
                     "answer": { "choiceId": "blue" }
                   },
@@ -722,12 +774,12 @@
                     "prompt": {
                       "text": "طابق اللون مع اسمه",
                       "imageUrl": "images/ui/match.webp",
-                      "audioUrl": "https://example.com/audio/ar/questions/colors/q-match.mp3"
+                      "audioUrl": "sounds/correct.mp3"
                     },
                     "left": [
-                      { "id": "lc_red", "text": "🔴" },
-                      { "id": "lc_blue", "text": "🔵" },
-                      { "id": "lc_yellow", "text": "🟡" }
+                      { "id": "lc_red", "text": "🔴", "imageUrl": "images/colors/red.webp" },
+                      { "id": "lc_blue", "text": "🔵", "imageUrl": "images/colors/blue.webp" },
+                      { "id": "lc_yellow", "text": "🟡", "imageUrl": "images/colors/yellow.webp" }
                     ],
                     "right": [
                       { "id": "rc_red", "text": "أحمر", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
@@ -746,7 +798,7 @@
                     "prompt": {
                       "text": "ضع اسم اللون تحت دائرته",
                       "imageUrl": "images/ui/drag.webp",
-                      "audioUrl": "https://example.com/audio/ar/questions/colors/q-drag.mp3"
+                      "audioUrl":"sounds/correct.mp3"
                     },
                     "draggable": [
                       { "id": "d_red", "text": "أحمر", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
@@ -754,9 +806,9 @@
                       { "id": "d_yellow", "text": "أصفر", "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3" }
                     ],
                     "targets": [
-                      { "id": "t_red", "label": "🔴" },
-                      { "id": "t_blue", "label": "🔵" },
-                      { "id": "t_yellow", "label": "🟡" }
+                      { "id": "t_red", "label": "🔴", "imageUrl": "images/colors/red.webp" },
+                      { "id": "t_blue", "label": "🔵", "imageUrl": "images/colors/blue.webp" },
+                      { "id": "t_yellow", "label": "🟡", "imageUrl": "images/colors/yellow.webp" }
                     ],
                     "map": [
                       { "dragId": "d_red", "targetId": "t_red" },
@@ -770,12 +822,12 @@
                     "prompt": {
                       "text": "رتّب الألوان حسب إشارة المرور: أحمر ثم أصفر ثم أزرق",
                       "imageUrl": "images/ui/order.webp",
-                      "audioUrl": "https://example.com/audio/ar/questions/colors/q-order-traffic.mp3"
+                      "audioUrl": "sounds/correct.mp3"
                     },
                     "tiles": [
-                      { "id": "o_red", "text": "🔴", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
-                      { "id": "o_yellow", "text": "🟡", "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3" },
-                      { "id": "o_blue", "text": "🔵", "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3" }
+                      { "id": "o_red", "text": "🔴", "imageUrl": "images/colors/red.webp", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
+                      { "id": "o_yellow", "text": "🟡", "imageUrl": "images/colors/yellow.webp", "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3" },
+                      { "id": "o_blue", "text": "🔵", "imageUrl": "images/colors/blue.webp", "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3" }
                     ],
                     "answer": { "orderedIds": ["o_red", "o_yellow", "o_blue"] }
                   },
@@ -792,9 +844,9 @@
                       { "id": "cat_cool", "label": "باردة" }
                     ],
                     "items": [
-                      { "id": "it_red", "text": "🔴", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
-                      { "id": "it_yellow", "text": "🟡", "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3" },
-                      { "id": "it_blue", "text": "🔵", "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3" }
+                      { "id": "it_red", "text": "🔴", "imageUrl": "images/colors/red.webp", "audioUrl": "https://example.com/audio/ar/colors/red-word.mp3" },
+                      { "id": "it_yellow", "text": "🟡", "imageUrl": "images/colors/yellow.webp", "audioUrl": "https://example.com/audio/ar/colors/yellow-word.mp3" },
+                      { "id": "it_blue", "text": "🔵", "imageUrl": "images/colors/blue.webp", "audioUrl": "https://example.com/audio/ar/colors/blue-word.mp3" }
                     ],
                     "answer": {
                       "map": [
@@ -973,9 +1025,9 @@
                       "audioUrl": "https://example.com/audio/ar/questions/letters/q-choose-baa.mp3"
                     },
                     "choices": [
-                      { "id": "alef", "text": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
-                      { "id": "baa", "text": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
-                      { "id": "taa", "text": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
+                      { "id": "alef", "letter": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
+                      { "id": "baa", "letter": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
+                      { "id": "taa", "letter": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
                     ],
                     "answer": { "choiceId": "baa" }
                   },
@@ -988,9 +1040,9 @@
                       "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3"
                     },
                     "choices": [
-                      { "id": "alef", "text": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
-                      { "id": "baa", "text": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
-                      { "id": "taa", "text": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
+                      { "id": "alef", "letter": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
+                      { "id": "baa", "letter": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
+                      { "id": "taa", "letter": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
                     ],
                     "answer": { "choiceId": "alef" }
                   },
@@ -1051,9 +1103,9 @@
                       "audioUrl": "https://example.com/audio/ar/questions/letters/q-order.mp3"
                     },
                     "tiles": [
-                      { "id": "oa", "text": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
-                      { "id": "ob", "text": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
-                      { "id": "ot", "text": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
+                      { "id": "oa", "letter": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
+                      { "id": "ob", "letter": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
+                      { "id": "ot", "letter": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
                     ],
                     "answer": { "orderedIds": ["oa", "ob", "ot"] }
                   },
@@ -1070,9 +1122,9 @@
                       { "id": "cat_plain", "label": "غير منقوط" }
                     ],
                     "items": [
-                      { "id": "it_alef", "text": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
-                      { "id": "it_baa", "text": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
-                      { "id": "it_taa", "text": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
+                      { "id": "it_alef", "letter": "أ", "audioUrl": "https://example.com/audio/ar/letters/alef-word.mp3" },
+                      { "id": "it_baa", "letter": "ب", "audioUrl": "https://example.com/audio/ar/letters/baa-word.mp3" },
+                      { "id": "it_taa", "letter": "ت", "audioUrl": "https://example.com/audio/ar/letters/taa-word.mp3" }
                     ],
                     "answer": {
                       "map": [
@@ -1250,24 +1302,9 @@
                       "audioUrl": "https://example.com/audio/ar/questions/numbers/q-choose-3.mp3"
                     },
                     "choices": [
-                      {
-                        "id": "one",
-                        "text": "١",
-                        "imageUrl": "images/numbers/one.webp",
-                        "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3"
-                      },
-                      {
-                        "id": "two",
-                        "text": "٢",
-                        "imageUrl": "images/numbers/two.webp",
-                        "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3"
-                      },
-                      {
-                        "id": "three",
-                        "text": "٣",
-                        "imageUrl": "images/numbers/three.webp",
-                        "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3"
-                      }
+                      { "id": "one", "text": "١", "imageUrl": "images/numbers/one.webp", "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3" },
+                      { "id": "two", "text": "٢", "imageUrl": "images/numbers/two.webp", "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3" },
+                      { "id": "three", "text": "٣", "imageUrl": "images/numbers/three.webp", "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3" }
                     ],
                     "answer": { "choiceId": "three" }
                   },
@@ -1280,24 +1317,9 @@
                       "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3"
                     },
                     "choices": [
-                      {
-                        "id": "one",
-                        "text": "١",
-                        "imageUrl": "images/numbers/one.webp",
-                        "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3"
-                      },
-                      {
-                        "id": "two",
-                        "text": "٢",
-                        "imageUrl": "images/numbers/two.webp",
-                        "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3"
-                      },
-                      {
-                        "id": "three",
-                        "text": "٣",
-                        "imageUrl": "images/numbers/three.webp",
-                        "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3"
-                      }
+                      { "id": "one", "text": "١", "imageUrl": "images/numbers/one.webp", "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3" },
+                      { "id": "two", "text": "٢", "imageUrl": "images/numbers/two.webp", "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3" },
+                      { "id": "three", "text": "٣", "imageUrl": "images/numbers/three.webp", "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3" }
                     ],
                     "answer": { "choiceId": "one" }
                   },
@@ -1339,9 +1361,9 @@
                       { "id": "d_three", "text": "ثلاثة", "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3" }
                     ],
                     "targets": [
-                      { "id": "t_one", "label": "١" },
-                      { "id": "t_two", "label": "٢" },
-                      { "id": "t_three", "label": "٣" }
+                      { "id": "t_one", "label": "١", "imageUrl": "images/numbers/one.webp" },
+                      { "id": "t_two", "label": "٢", "imageUrl": "images/numbers/two.webp" },
+                      { "id": "t_three", "label": "٣", "imageUrl": "images/numbers/three.webp" }
                     ],
                     "map": [
                       { "dragId": "d_one", "targetId": "t_one" },
@@ -1358,9 +1380,9 @@
                       "audioUrl": "https://example.com/audio/ar/questions/numbers/q-order.mp3"
                     },
                     "tiles": [
-                      { "id": "o_1", "text": "١", "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3" },
-                      { "id": "o_2", "text": "٢", "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3" },
-                      { "id": "o_3", "text": "٣", "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3" }
+                      { "id": "o_1", "text": "١", "imageUrl": "images/numbers/one.webp", "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3" },
+                      { "id": "o_2", "text": "٢", "imageUrl": "images/numbers/two.webp", "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3" },
+                      { "id": "o_3", "text": "٣", "imageUrl": "images/numbers/three.webp", "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3" }
                     ],
                     "answer": { "orderedIds": ["o_1", "o_2", "o_3"] }
                   },
@@ -1377,9 +1399,9 @@
                       { "id": "cat_even", "label": "زوجي" }
                     ],
                     "items": [
-                      { "id": "it_1", "text": "١", "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3" },
-                      { "id": "it_2", "text": "٢", "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3" },
-                      { "id": "it_3", "text": "٣", "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3" }
+                      { "id": "it_1", "text": "١", "imageUrl": "images/numbers/one.webp", "audioUrl": "https://example.com/audio/ar/numbers/one-word.mp3" },
+                      { "id": "it_2", "text": "٢", "imageUrl": "images/numbers/two.webp", "audioUrl": "https://example.com/audio/ar/numbers/two-word.mp3" },
+                      { "id": "it_3", "text": "٣", "imageUrl": "images/numbers/three.webp", "audioUrl": "https://example.com/audio/ar/numbers/three-word.mp3" }
                     ],
                     "answer": {
                       "map": [
