@@ -607,7 +607,11 @@
         justify-content: center;
         font-weight: 1000;
       }
-    }
+    }.backInlineBtn,
+.sidebarBackBtn {
+  touch-action: manipulation;
+}
+
   </style>
 </head>
 
@@ -793,7 +797,13 @@
     </div>
     <button type="button" id="toastClose">إغلاق</button>
   </div>
-<script>/* =========================================================
+<script>
+/* =========================================================
+  Sections / Lessons / Viewer (Mobile-safe, cleaned)
+  Fix: Prevent accidental back navigation on touch scroll
+========================================================= */
+
+/* =========================================================
   0) CONFIG + URL PARAMS
 ========================================================= */
 const DATA_FILE = "sections-lessens.json";
@@ -825,7 +835,9 @@ function showToast(title, msg) {
   $("#toastMsg").textContent = msg;
   $("#toast").classList.add("show");
 }
-function hideToast() { $("#toast").classList.remove("show"); }
+function hideToast() {
+  $("#toast").classList.remove("show");
+}
 $("#toastClose")?.addEventListener("click", hideToast);
 
 /* =========================================================
@@ -833,10 +845,11 @@ $("#toastClose")?.addEventListener("click", hideToast);
 ========================================================= */
 const CHILD = {
   name: "سارة",
-  avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=70",
+  avatarUrl:
+    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=70",
   badge: { iconEmoji: "🏅", name: "شارة البداية" },
   stars: 12,
-  groups: 0
+  groups: 0,
 };
 
 (function renderShellHeader() {
@@ -857,12 +870,19 @@ const overlay = document.getElementById("drawerOverlay");
 const closeDrawerBtn = document.getElementById("closeDrawerBtn");
 
 function syncDrawerContent() {
-  document.getElementById("drawerChildName").textContent = $("#childName")?.textContent || "";
-  document.getElementById("drawerBadgeName").textContent = $("#badgeName")?.textContent || "";
-  document.getElementById("drawerStarsNo").textContent = $("#starsNo")?.textContent || "";
-  document.getElementById("drawerGroupsNo").textContent = $("#groupsNo")?.textContent || "";
-  document.getElementById("drawerPageTitle").textContent = $("#pageTitle")?.textContent || "أقسام المستوى";
-  const avatarSrc = document.getElementById("avatarImg").getAttribute("src");
+  document.getElementById("drawerChildName").textContent =
+    $("#childName")?.textContent || "";
+  document.getElementById("drawerBadgeName").textContent =
+    $("#badgeName")?.textContent || "";
+  document.getElementById("drawerStarsNo").textContent =
+    $("#starsNo")?.textContent || "";
+  document.getElementById("drawerGroupsNo").textContent =
+    $("#groupsNo")?.textContent || "";
+  document.getElementById("drawerPageTitle").textContent =
+    $("#pageTitle")?.textContent || "أقسام المستوى";
+  const avatarSrc = document
+    .getElementById("avatarImg")
+    .getAttribute("src");
   document.getElementById("drawerAvatarImg").setAttribute("src", avatarSrc);
 }
 
@@ -969,7 +989,47 @@ function syncMobileDefaultView() {
   }
   setMobileMode("sections");
 }
+
 window.addEventListener("resize", syncMobileDefaultView);
+
+/* =========================================================
+  5) SAFE TAP (Fix accidental back on scroll)
+========================================================= */
+function safeTap(btn, onTap, threshold = 12) {
+  if (!btn) return;
+
+  let startX = 0;
+  let startY = 0;
+  let moved = false;
+
+  btn.addEventListener("pointerdown", (e) => {
+    startX = e.clientX;
+    startY = e.clientY;
+    moved = false;
+  });
+
+  btn.addEventListener("pointermove", (e) => {
+    if (
+      Math.abs(e.clientX - startX) > threshold ||
+      Math.abs(e.clientY - startY) > threshold
+    ) {
+      moved = true;
+    }
+  });
+
+  btn.addEventListener("pointerup", (e) => {
+    if (moved) return; // treat as scroll/drag
+    e.preventDefault();
+    e.stopPropagation();
+    onTap();
+  });
+
+  // Prevent delayed click firing after scroll gesture
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  });
+}
 
 /* =========================================================
   6) MODE BUTTONS + VIEW SWITCH
@@ -1051,15 +1111,14 @@ $("#lessonsViewBtn")?.addEventListener("click", () => {
   if (isMobile()) setMobileMode("lessons");
 });
 
-/* Mobile back in sidebar: lessons -> sections */
-$("#backToSectionsBtn")?.addEventListener("click", () => {
+/* Mobile-safe back wiring (FIXED) */
+safeTap(document.getElementById("backToSectionsBtn"), () => {
   ACTIVE_LESSON = null;
   showSectionsView();
   if (isMobile()) setMobileMode("sections");
 });
 
-/* Mobile back in viewer: viewer -> lessons */
-$("#backToLessonsBtn")?.addEventListener("click", () => {
+safeTap(document.getElementById("backToLessonsBtn"), () => {
   if (!ACTIVE_SECTION) {
     showSectionsView();
     if (isMobile()) setMobileMode("sections");
@@ -1082,7 +1141,7 @@ function renderSectionsList() {
     return;
   }
 
-  SECTIONS.forEach(sec => {
+  SECTIONS.forEach((sec) => {
     const el = document.createElement("div");
     el.className = "sectionItem";
     el.tabIndex = 0;
@@ -1099,7 +1158,7 @@ function renderSectionsList() {
 
     const open = () => selectSection(sec.sectionId);
     el.addEventListener("click", open);
-    el.addEventListener("keydown", e => {
+    el.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         open();
@@ -1145,7 +1204,7 @@ function renderLessonsList(sec) {
     };
 
     el.addEventListener("click", open);
-    el.addEventListener("keydown", e => {
+    el.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         open();
@@ -1155,8 +1214,9 @@ function renderLessonsList(sec) {
     wrap.appendChild(el);
   });
 
+  // highlight active
   if (ACTIVE_LESSON?.lessonId) {
-    document.querySelectorAll("#lessonsList .sectionItem").forEach(item => {
+    document.querySelectorAll("#lessonsList .sectionItem").forEach((item) => {
       const on = item.dataset.id === ACTIVE_LESSON.lessonId;
       item.style.borderColor = on ? "rgba(47,128,237,.55)" : "";
       item.style.background = on ? "rgba(47,128,237,.10)" : "";
@@ -1165,7 +1225,7 @@ function renderLessonsList(sec) {
 }
 
 function selectSection(sectionId) {
-  const sec = SECTIONS.find(s => s.sectionId === sectionId);
+  const sec = SECTIONS.find((s) => s.sectionId === sectionId);
   if (!sec) return showToast("تنبيه", "القسم غير موجود");
 
   ACTIVE_SECTION = sec;
@@ -1183,7 +1243,7 @@ function selectSection(sectionId) {
   9) LESSON SELECT
 ========================================================= */
 function selectLesson(lessonId) {
-  const L = (ACTIVE_SECTION?.lessons || []).find(x => x.lessonId === lessonId);
+  const L = (ACTIVE_SECTION?.lessons || []).find((x) => x.lessonId === lessonId);
   if (!L) return showToast("تنبيه", "الدرس غير موجود");
 
   ACTIVE_LESSON = L;
@@ -1226,18 +1286,16 @@ function renderVideoView() {
 }
 
 /* =========================================================
-  12) FLASHCARDS (UPDATED)
-  - Front: sound icon next to TEXT if audio exists
-  - Back:  sound icon next to DESC if audio exists
+  12) FLASHCARDS (sound icon per side)
 ========================================================= */
 function prepareFlashcardsForLesson(lesson) {
   const items = Array.isArray(lesson?.items) ? lesson.items : [];
   FLASH_CARDS = items
-    .filter(it => it && (it.front || it.back))
-    .map(it => ({
+    .filter((it) => it && (it.front || it.back))
+    .map((it) => ({
       itemId: it.itemId,
       front: it.front || {},
-      back: it.back || {}
+      back: it.back || {},
     }));
 
   flashIndex = 0;
@@ -1260,11 +1318,10 @@ function renderFlashView() {
   const face = flashFlipped ? back : front;
 
   const faceVideoUrl = face.videoUrl || "";
-  const showGoQuestions = (idx === total - 1);
+  const showGoQuestions = idx === total - 1;
 
-  // Robust audio lookup:
-  // Prefer face.audioUrl, then side-specific audioUrl
-  const sideAudioUrl = (face.audioUrl || (flashFlipped ? back.audioUrl : front.audioUrl) || "");
+  const sideAudioUrl =
+    (face.audioUrl || (flashFlipped ? back.audioUrl : front.audioUrl) || "");
   const showSound = Boolean(sideAudioUrl);
 
   $("#viewer").innerHTML = `
@@ -1282,7 +1339,6 @@ function renderFlashView() {
             <img class="flashImg" id="cardImg" alt="card image"/>
           </div>
 
-          <!-- TEXT ROW (sound on FRONT only) -->
           <div class="flashText" id="cardTextRow">
             <span id="cardText"></span>
             <button class="soundInlineBtn" id="soundBtnText" type="button" aria-label="تشغيل الصوت" title="تشغيل الصوت">
@@ -1292,7 +1348,6 @@ function renderFlashView() {
 
           <audio id="cardAudio" preload="none"></audio>
 
-          <!-- DESC ROW (sound on BACK only, next to desc) -->
           <div class="flashDescRow" id="cardDescRow">
             <span class="flashDesc" id="cardDesc"></span>
             <button class="soundInlineBtn" id="soundBtnDesc" type="button" aria-label="تشغيل الصوت" title="تشغيل الصوت">
@@ -1308,7 +1363,11 @@ function renderFlashView() {
 
       <div class="flashFooter" style="margin-top:12px;">
         <div class="flashCounter">بطاقة ${idx + 1} من ${total}</div>
-        ${showGoQuestions ? `<button class="miniBtn primary" id="goQuestions" type="button">🧩 ابدأ الأسئلة</button>` : ``}
+        ${
+          showGoQuestions
+            ? `<button class="miniBtn primary" id="goQuestions" type="button">🧩 ابدأ الأسئلة</button>`
+            : ``
+        }
       </div>
     </div>
   `;
@@ -1339,7 +1398,7 @@ function renderFlashView() {
   $("#cardText").textContent = face.text || "—";
   $("#cardDesc").textContent = face.desc || "";
 
-  // Setup audio
+  // audio
   if (showSound) {
     audioEl.src = sideAudioUrl;
   } else {
@@ -1347,24 +1406,25 @@ function renderFlashView() {
     audioEl.load();
   }
 
-  // FRONT: show icon next to text
-  soundBtnText.style.display = (!flashFlipped && showSound) ? "inline-flex" : "none";
-  // BACK: show icon next to desc
-  soundBtnDesc.style.display = (flashFlipped && showSound) ? "inline-flex" : "none";
+  // FRONT: icon near text, BACK: icon near desc
+  soundBtnText.style.display = !flashFlipped && showSound ? "inline-flex" : "none";
+  soundBtnDesc.style.display = flashFlipped && showSound ? "inline-flex" : "none";
 
   function playSideAudio(e) {
     e.stopPropagation(); // prevent flip
     if (!audioEl.src) return;
 
     if (videoEl && !videoEl.paused) videoEl.pause();
-    try { audioEl.currentTime = 0; } catch {}
+    try {
+      audioEl.currentTime = 0;
+    } catch {}
     audioEl.play().catch(() => {});
   }
 
   soundBtnText?.addEventListener("click", playSideAudio);
   soundBtnDesc?.addEventListener("click", playSideAudio);
 
-  /* -------- prevent flip when interacting with media -------- */
+  // prevent flip when interacting with media
   mediaWrap?.addEventListener("click", (e) => e.stopPropagation());
   mediaWrap?.addEventListener("pointerdown", (e) => e.stopPropagation());
   mediaWrap?.addEventListener("touchstart", (e) => e.stopPropagation(), { passive: true });
@@ -1373,14 +1433,15 @@ function renderFlashView() {
   videoEl?.addEventListener("pointerdown", (e) => e.stopPropagation());
   videoEl?.addEventListener("touchstart", (e) => e.stopPropagation(), { passive: true });
 
-  /* ------------------------- Flip / Nav handlers -------------------------- */
+  // flip
   $("#flashCard")?.addEventListener("click", (e) => {
     if (
       e.target.closest("video") ||
       e.target.closest("#flashMedia") ||
       e.target.closest("#soundBtnText") ||
       e.target.closest("#soundBtnDesc")
-    ) return;
+    )
+      return;
 
     if (videoEl && !videoEl.paused) videoEl.pause();
     if (audioEl && !audioEl.paused) audioEl.pause();
@@ -1389,6 +1450,7 @@ function renderFlashView() {
     renderFlashView();
   });
 
+  // nav
   $("#prevArrow")?.addEventListener("click", (e) => {
     e.stopPropagation();
     if (videoEl && !videoEl.paused) videoEl.pause();
@@ -1426,12 +1488,14 @@ function renderFlashView() {
 /* =========================================================
   13) DATA LOADING
 ========================================================= */
-function normalize(raw) { return raw || {}; }
+function normalize(raw) {
+  return raw || {};
+}
 
 function findLevel(d, id) {
   const levels = Array.isArray(d?.levels) ? d.levels : [];
   const key = String(id || "").toLowerCase();
-  return levels.find(l => String(l.levelId || "").toLowerCase() === key) || null;
+  return levels.find((l) => String(l.levelId || "").toLowerCase() === key) || null;
 }
 
 async function loadFromFile() {
@@ -1487,16 +1551,16 @@ async function loadFromFile() {
     }
 
     SECTIONS = Array.isArray(LEVEL.sections)
-      ? LEVEL.sections.map(sec => ({
-        ...sec,
-        sectionId: String(sec.sectionId || "").toLowerCase(),
-        lessons: Array.isArray(sec.lessons)
-          ? sec.lessons.map(l => ({
-            ...l,
-            lessonId: String(l.lessonId || "").toLowerCase()
-          }))
-          : []
-      }))
+      ? LEVEL.sections.map((sec) => ({
+          ...sec,
+          sectionId: String(sec.sectionId || "").toLowerCase(),
+          lessons: Array.isArray(sec.lessons)
+            ? sec.lessons.map((l) => ({
+                ...l,
+                lessonId: String(l.lessonId || "").toLowerCase(),
+              }))
+            : [],
+        }))
       : [];
 
     $("#welcomeTitle").textContent = LEVEL.levelTitle || "أقسام المستوى";
@@ -1508,7 +1572,6 @@ async function loadFromFile() {
     ACTIVE_LESSON = null;
     showSectionsView();
     syncMobileDefaultView();
-
   } catch {
     DATA = null;
     LEVEL = null;
@@ -1531,6 +1594,7 @@ $("#reloadBtn")?.addEventListener("click", loadFromFile);
 ========================================================= */
 loadFromFile();
 syncMobileDefaultView();
+
 </script>
 </body>
 
