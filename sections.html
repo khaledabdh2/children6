@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>أقسام المستوى</title>
+
+  <link rel="stylesheet" href="children-style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --muted: #6B7280;
+      --primary: #2F80ED;
+
+      --r: 18px;
+      --shadow2: 0 6px 14px rgba(31, 42, 68, .10);
+      --ring: 0 0 0 4px rgba(47, 128, 237, .18);
+
+      --barRadius: calc(var(--r) + 14px);
+      --pillRadius: 999px;
+    }
+
+    /* ================= HEADER ================= */
+    .appbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid rgba(31, 42, 68, .08);
+      box-shadow: var(--shadow2);
+      border-radius: var(--barRadius);
+      padding: 12px;
+
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profileBox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatarImg {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid rgba(31, 42, 68, .10);
+      background: #fff;
+      box-shadow: var(--shadow2);
+      flex: 0 0 auto;
+    }
+
+    .profileMeta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      align-items: flex-start;
+    }
+
+    .profileMeta .name {
+      font-size: 14px;
+      font-weight: 1000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 22ch;
+    }
+
+    .profileMeta .badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .profileMeta .badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(242, 201, 76, .95);
+      box-shadow: 0 0 0 4px rgba(242, 201, 76, .18);
+      flex: 0 0 auto;
+    }
+
+    .titleBox {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+
+    .titleBox h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 1000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .statChip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--pillRadius);
+      background: rgba(255, 255, 255, .92);
+      border: 1px solid rgba(31, 42, 68, .10);
+      font-weight: 1000;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .statChip[role="button"] {
+      cursor: pointer;
+    }
+
+    .statChip[role="button"]:focus {
+      outline: none;
+      box-shadow: var(--shadow2), var(--ring);
+    }
+
+    .statChip .ico {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(31, 42, 68, .08);
+      background: rgba(31, 42, 68, .04);
+      flex: 0 0 auto;
+      font-size: 14px;
+    }
+
+    .statChip.stars .ico {
+      background: rgba(242, 201, 76, .20);
+    }
+
+    .statChip.groups .ico {
+      background: rgba(111, 207, 151, .16);
+    }
+
+    .statChip .txt {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1.1;
+    }
+
+    .statChip .txt small {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .menuBtn {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      border: 1px solid rgba(31, 42, 68, .10);
+      background: rgba(255, 255, 255, .92);
+      box-shadow: var(--shadow2);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex: 0 0 auto;
+    }
+
+    .menuBtn:focus {
+      box-shadow: var(--shadow2), var(--ring);
+      outline: none;
+    }
+
+    .leftCluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    @media (max-width:560px) {
+      .appbar {
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+      }
+
+      .menuBtn {
+        display: flex;
+      }
+
+      .stats {
+        display: none;
+      }
+
+      .appbar {
+        padding: 10px
+      }
+
+      .avatarImg {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+      }
+
+      .profileMeta .badge {
+        font-size: 11.5px;
+      }
+    }
+
+    /* ================= WELCOME ================= */
+    .welcomeText {
+      padding: 2px 2px 0;
+    }
+
+    .welcomeText h2 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      font-weight: 1000;
+      line-height: 1.2;
+    }
+
+    /* ================= Drawer ================= */
+    .drawerOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(31, 42, 68, .38);
+      backdrop-filter: blur(2px);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+    }
+
+    .drawerOverlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: min(88vw, 380px);
+      background: rgba(255, 255, 255, .96);
+      border-left: 1px solid rgba(31, 42, 68, .10);
+      box-shadow: 0 18px 40px rgba(31, 42, 68, .18);
+      z-index: 1000;
+      transform: translateX(105%);
+      transition: transform .22s ease;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawerHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(31, 42, 68, .08);
+    }
+
+    .drawerTitle {
+      font-weight: 1000;
+      font-size: 14px;
+    }
+
+    .closeBtn {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      border: 1px solid rgba(31, 42, 68, .10);
+      background: #fff;
+      box-shadow: var(--shadow2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .drawerTop {
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid rgba(31, 42, 68, .08);
+      box-shadow: var(--shadow2);
+      border-radius: 22px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .drawerRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .drawerTop .titleBox {
+      justify-content: flex-start;
+    }
+
+    .drawerTop h1 {
+      font-size: 16px;
+    }
+
+    .drawerStats {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .drawerStatLine {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(31, 42, 68, .10);
+      background: rgba(31, 42, 68, .03);
+      font-weight: 1000;
+    }
+
+    .drawerStatLine .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .drawerStatLine .ico {
+      width: 34px;
+      height: 34px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(31, 42, 68, .08);
+      background: #fff;
+      flex: 0 0 auto;
+      font-size: 15px;
+    }
+
+    .drawerStatLine small {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 900;
+      margin-top: 1px;
+    }
+
+    /* ================= Layout Split ================= */
+    .split {
+      display: grid;
+      grid-template-columns: minmax(240px, fit-content(420px)) 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .sidebarPane {
+      width: max-content;
+      max-width: 420px;
+      min-width: 240px;
+    }
+
+    .viewerPane {
+      min-width: 0;
+    }
+
+    /* ================= Viewer title row ================= */
+    .lessonTitleRow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .titleInlineRight {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    /* Viewer back button (only on mobile when viewer is shown) */
+    .backInlineBtn {
+      display: none;
+      white-space: nowrap;
+    }
+
+    /* Sidebar back button (only on mobile when lessons is shown) */
+    .sidebarBackBtn {
+      display: none;
+      white-space: nowrap;
+    }
+
+    /* ================= Flash UI ================= */
+    .flashText {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .soundInlineBtn {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      border: 1px solid rgba(31, 42, 68, .10);
+      background: rgba(255, 255, 255, .92);
+      box-shadow: var(--shadow2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .soundInlineBtn i {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .soundInlineBtn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .soundInlineBtn:focus {
+      outline: none;
+      box-shadow: var(--shadow2), var(--ring);
+    }
+
+    .flashSideLabel {
+      text-align: center;
+      font-weight: 1000;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    /* ================= Mobile behavior ================= */
+    @media (max-width:560px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .split.mobile-show-sidebar .viewerPane {
+        display: none;
+      }
+
+      .split.mobile-show-viewer .sidebarPane {
+        display: none;
+      }
+
+      /* show viewer back button only when viewer is active */
+      .split.mobile-show-viewer .backInlineBtn {
+        display: inline-flex;
+      }
+
+      /* show sidebar back button only when lessons view is active */
+      .split.mobile-show-sidebar.mobile-lessons .sidebarBackBtn {
+        display: inline-flex;
+      }
+
+      /* center sidebar + lists on mobile */
+      .sidebarPane {
+        margin: 0 auto;
+        max-width: 420px;
+        width: 100%;
+      }
+
+      #sectionsList,
+      #lessonsList,
+      #groupsList {
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .sectionItem {
+        width: 100%;
+      }
+
+      /* Tabs: aligned & equal sizing */
+      .modeTabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        align-items: stretch;
+      }
+
+      .modeTabs .modeBtn {
+        height: 44px;
+        padding: 0 8px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 1000;
+        line-height: 1;
+        white-space: nowrap;
+        min-width: 0;
+      }
+
+      .modeTabs .modeBtn span:first-child {
+        font-size: 16px;
+        line-height: 1;
+        flex: 0 0 auto;
+      }
+
+      .modeTabs .modeBtn span:last-child {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      #activeLessonTitle {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      #activeLessonDesc {
+        max-width: 14ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* Wider flash card on mobile */
+      .flashStage {
+        padding: 0 6px;
+      }
+
+      .flashCardSingle {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        border-radius: 22px;
+      }
+
+      .soundInlineBtn {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+      }
+
+      .soundInlineBtn i {
+        font-size: 20px;
+      }
+
+      /* Better tap targets */
+      .navArrow {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+      }
+
+      #goQuestions.miniBtn.primary {
+        width: 100%;
+        height: 44px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 1000;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <!-- Drawer Overlay + Drawer -->
+  <div class="drawerOverlay" id="drawerOverlay" aria-hidden="true"></div>
+
+  <aside class="drawer" id="mobileDrawer" aria-label="قائمة الهاتف" aria-hidden="true">
+    <div class="drawerHeader">
+      <div class="drawerTitle">القائمة</div>
+      <button class="closeBtn" id="closeDrawerBtn" type="button" aria-label="إغلاق القائمة">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="drawerTop" aria-label="محتوى الهيدر داخل القائمة">
+      <div class="drawerRow">
+        <div class="profileBox" aria-label="الملف الشخصي (داخل القائمة)">
+          <img class="avatarImg" id="drawerAvatarImg"
+            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=70"
+            alt="صورة الملف الشخصي" />
+          <div class="profileMeta">
+            <div class="name" id="drawerChildName">سارة</div>
+            <div class="badge"><span class="dot"></span><span id="drawerBadgeName">شارة البداية</span></div>
+          </div>
+        </div>
+
+        <div class="titleBox" aria-label="العنوان (داخل القائمة)">
+          <h1 id="drawerPageTitle" style="margin:0;font-weight:1000;">أقسام المستوى</h1>
+        </div>
+      </div>
+
+      <div class="drawerStats" aria-label="الإحصائيات (داخل القائمة)">
+        <div class="drawerStatLine" aria-label="النجوم">
+          <div class="left">
+            <div class="ico" aria-hidden="true"><i class="bi bi-star-fill"></i></div>
+            <div>
+              <div><span id="drawerStarsNo">12</span> نجمة</div>
+              <small>رصيدي</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawerStatLine" aria-label="المجموعات">
+          <div class="left">
+            <div class="ico" aria-hidden="true"><i class="bi bi-people-fill"></i></div>
+            <div>
+              <div><span id="drawerGroupsNo">0</span> مجموعات</div>
+              <small>أصدقائي</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="app-shell">
+    <div class="container">
+      <div class="layout">
+
+        <!-- HEADER -->
+        <header class="appbar" aria-label="الهيدر">
+          <div class="leftCluster" aria-label="القائمة والملف الشخصي">
+            <button class="menuBtn" id="menuBtn" type="button" aria-label="فتح القائمة" aria-controls="mobileDrawer"
+              aria-expanded="false">
+              <i class="bi bi-list" aria-hidden="true"></i>
+            </button>
+
+            <div class="profileBox" aria-label="الملف الشخصي">
+              <img class="avatarImg" id="avatarImg"
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=70"
+                alt="صورة الملف الشخصي" />
+              <div class="profileMeta">
+                <div class="name" id="childName">سارة</div>
+                <div class="badge"><span class="dot"></span><span id="badgeName">شارة البداية</span></div>
+                <span id="badgeIcon" style="display:none;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats" aria-label="الإحصائيات">
+            <div class="statChip stars" id="starsTab" role="button" tabindex="0" aria-label="النجوم">
+              <div class="ico" aria-hidden="true"><i class="bi bi-star-fill"></i></div>
+              <div class="txt">
+                <div><span id="starsNo">12</span> نجمة</div>
+                <small>رصيدي</small>
+              </div>
+            </div>
+
+            <div class="statChip groups" id="groupsTab" role="button" tabindex="0" aria-label="المجموعات">
+              <div class="ico" aria-hidden="true"><i class="bi bi-people-fill"></i></div>
+              <div class="txt">
+                <div><span id="groupsNo">0</span> مجموعات</div>
+                <small>أصدقائي</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="titleBox" aria-label="العنوان">
+            <h1 id="pageTitle">أقسام المستوى</h1>
+          </div>
+        </header>
+
+        <section class="welcomeText" aria-label="رسالة ترحيب">
+          <h2 id="welcomeTitle">أقسام المستوى</h2>
+        </section>
+
+        <section class="content">
+          <div class="split mobile-show-sidebar" id="splitLayout">
+
+            <!-- SIDEBAR -->
+            <aside class="pane sidebarPane" aria-label="الأقسام والدروس" id="leftPane">
+              <div class="paneHead">
+                <div class="paneTitle" style="display:flex; align-items:center; gap:10px;">
+                  <!-- Mobile back in SIDEBAR: lessons -> sections -->
+                  <button class="miniBtn sidebarBackBtn" id="backToSectionsBtn" type="button">← الأقسام</button>
+
+                  <span class="miniDot"></span>
+                  <span id="leftTitle">الأقسام</span>
+                </div>
+
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                  <button class="miniBtn primary" id="reloadBtn" type="button">تحديث</button>
+                  <button class="miniBtn" id="groupsViewBtn" type="button">المجموعات</button>
+                  <button class="miniBtn" id="lessonsViewBtn" type="button" style="display:none;">الدروس</button>
+                </div>
+              </div>
+
+              <div class="sectionsWrap" id="sectionsList"></div>
+              <div class="sectionsWrap" id="lessonsList" style="display:none;"></div>
+              <div class="sectionsWrap" id="groupsList" style="display:none;"></div>
+            </aside>
+
+            <!-- VIEWER -->
+            <section class="pane viewerBox viewerPane" aria-label="عارض المحتوى" id="viewerPane">
+              <div class="viewerTop">
+                <div class="lessonTitleRow">
+                  <!-- Mobile back in VIEWER: viewer -> lessons -->
+                  <button class="miniBtn backInlineBtn" id="backToLessonsBtn" type="button">← الدروس</button>
+
+                  <div class="titleInlineRight">
+                    <span class="miniDot"></span>
+                    <span id="activeLessonTitle">اختر درسًا</span>
+                    <span class="lessonBadge" id="activeLessonDesc">—</span>
+                  </div>
+                </div>
+
+                <div class="modeTabs">
+                  <button class="modeBtn active" id="btnVideo" type="button" disabled>
+                    <span>🎬</span><span>الفيديو</span>
+                  </button>
+                  <button class="modeBtn" id="btnFlash" type="button" disabled>
+                    <span>🃏</span><span>فلاش كارد</span>
+                  </button>
+                  <button class="modeBtn" id="btnQuestions" type="button" disabled>
+                    <span>🧩</span><span>الأسئلة</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="viewer" id="viewer">
+                <div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">
+                  اختر قسمًا ثم درسًا لعرض المحتوى.
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <div>
+      <b id="toastTitle">تنبيه</b><br />
+      <span id="toastMsg">...</span>
+    </div>
+    <button type="button" id="toastClose">إغلاق</button>
+  </div>
+<script>/* =========================================================
+  0) CONFIG + URL PARAMS
+========================================================= */
+const DATA_FILE = "sections-lessens.json";
+const QUESTIONS_PAGE = "questions.html";
+
+const urlParams = new URL(location.href).searchParams;
+const levelIdRaw = urlParams.get("level");
+const levelId = levelIdRaw ? levelIdRaw.toLowerCase() : null;
+
+/* =========================================================
+  1) DOM HELPERS
+========================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+
+function esc(s) {
+  return String(s ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* =========================================================
+  2) TOAST
+========================================================= */
+function showToast(title, msg) {
+  $("#toastTitle").textContent = title;
+  $("#toastMsg").textContent = msg;
+  $("#toast").classList.add("show");
+}
+function hideToast() { $("#toast").classList.remove("show"); }
+$("#toastClose")?.addEventListener("click", hideToast);
+
+/* =========================================================
+  3) HEADER / CHILD PROFILE (DEMO)
+========================================================= */
+const CHILD = {
+  name: "سارة",
+  avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=70",
+  badge: { iconEmoji: "🏅", name: "شارة البداية" },
+  stars: 12,
+  groups: 0
+};
+
+(function renderShellHeader() {
+  $("#childName").textContent = CHILD.name;
+  $("#avatarImg").setAttribute("src", CHILD.avatarUrl);
+  $("#badgeIcon").textContent = CHILD.badge.iconEmoji;
+  $("#badgeName").textContent = CHILD.badge.name;
+  $("#starsNo").textContent = String(CHILD.stars);
+  $("#groupsNo").textContent = String(CHILD.groups);
+})();
+
+/* =========================================================
+  3.5) MOBILE DRAWER
+========================================================= */
+const menuBtn = document.getElementById("menuBtn");
+const mobileDrawer = document.getElementById("mobileDrawer");
+const overlay = document.getElementById("drawerOverlay");
+const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+
+function syncDrawerContent() {
+  document.getElementById("drawerChildName").textContent = $("#childName")?.textContent || "";
+  document.getElementById("drawerBadgeName").textContent = $("#badgeName")?.textContent || "";
+  document.getElementById("drawerStarsNo").textContent = $("#starsNo")?.textContent || "";
+  document.getElementById("drawerGroupsNo").textContent = $("#groupsNo")?.textContent || "";
+  document.getElementById("drawerPageTitle").textContent = $("#pageTitle")?.textContent || "أقسام المستوى";
+  const avatarSrc = document.getElementById("avatarImg").getAttribute("src");
+  document.getElementById("drawerAvatarImg").setAttribute("src", avatarSrc);
+}
+
+function openDrawer() {
+  syncDrawerContent();
+  mobileDrawer.classList.add("open");
+  overlay.classList.add("open");
+  mobileDrawer.setAttribute("aria-hidden", "false");
+  overlay.setAttribute("aria-hidden", "false");
+  menuBtn.setAttribute("aria-expanded", "true");
+  document.body.style.overflow = "hidden";
+  closeDrawerBtn?.focus();
+}
+
+function closeDrawer() {
+  mobileDrawer.classList.remove("open");
+  overlay.classList.remove("open");
+  mobileDrawer.setAttribute("aria-hidden", "true");
+  overlay.setAttribute("aria-hidden", "true");
+  menuBtn.setAttribute("aria-expanded", "false");
+  document.body.style.overflow = "";
+  menuBtn?.focus();
+}
+
+menuBtn?.addEventListener("click", openDrawer);
+closeDrawerBtn?.addEventListener("click", closeDrawer);
+overlay?.addEventListener("click", closeDrawer);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && mobileDrawer.classList.contains("open")) closeDrawer();
+});
+
+/* =========================================================
+  3.6) STAT CHIPS CLICKABLE
+========================================================= */
+function wireChipAsButton(el, onActivate) {
+  if (!el) return;
+  el.addEventListener("click", onActivate);
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onActivate();
+    }
+  });
+}
+
+wireChipAsButton(document.getElementById("starsTab"), () => {
+  showToast("النجوم ⭐", `رصيدك: ${CHILD.stars}`);
+});
+
+wireChipAsButton(document.getElementById("groupsTab"), () => {
+  showToast("المجموعات", `عدد المجموعات: ${CHILD.groups}`);
+});
+
+/* =========================================================
+  4) APP STATE
+========================================================= */
+let DATA = null;
+let LEVEL = null;
+
+let SECTIONS = [];
+let ACTIVE_SECTION = null;
+let ACTIVE_LESSON = null;
+
+let activeMode = "video"; // "video" | "flash"
+
+// Flash state
+let FLASH_CARDS = [];
+let flashIndex = 0;
+let flashFlipped = false;
+
+/* =========================================================
+  4.5) MOBILE VIEW CONTROLLER
+========================================================= */
+const splitLayout = document.getElementById("splitLayout");
+
+function isMobile() {
+  return window.matchMedia("(max-width: 560px)").matches;
+}
+
+function setMobileMode(mode) {
+  // mode: "sections" | "lessons" | "viewer"
+  if (!splitLayout) return;
+
+  splitLayout.classList.remove("mobile-lessons");
+
+  if (mode === "viewer") {
+    splitLayout.classList.add("mobile-show-viewer");
+    splitLayout.classList.remove("mobile-show-sidebar");
+    return;
+  }
+
+  splitLayout.classList.add("mobile-show-sidebar");
+  splitLayout.classList.remove("mobile-show-viewer");
+
+  if (mode === "lessons") {
+    splitLayout.classList.add("mobile-lessons");
+  }
+}
+
+function syncMobileDefaultView() {
+  if (!isMobile()) {
+    splitLayout?.classList.remove("mobile-show-sidebar", "mobile-show-viewer", "mobile-lessons");
+    return;
+  }
+  setMobileMode("sections");
+}
+window.addEventListener("resize", syncMobileDefaultView);
+
+/* =========================================================
+  6) MODE BUTTONS + VIEW SWITCH
+========================================================= */
+function enableModeButtons(on) {
+  $("#btnVideo").disabled = !on;
+  $("#btnFlash").disabled = !on;
+  $("#btnQuestions").disabled = !on;
+}
+
+function setMode(mode) {
+  activeMode = mode;
+
+  $("#btnVideo").classList.toggle("active", mode === "video");
+  $("#btnFlash").classList.toggle("active", mode === "flash");
+  $("#btnQuestions").classList.remove("active");
+
+  if (!ACTIVE_LESSON) {
+    $("#viewer").innerHTML =
+      `<div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">اختر درسًا أولاً.</div>`;
+    return;
+  }
+
+  renderViewer();
+}
+
+$("#btnVideo")?.addEventListener("click", () => setMode("video"));
+$("#btnFlash")?.addEventListener("click", () => setMode("flash"));
+
+$("#btnQuestions")?.addEventListener("click", () => {
+  if (!levelId || !ACTIVE_SECTION || !ACTIVE_LESSON) return;
+
+  const url =
+    `${QUESTIONS_PAGE}?level=${encodeURIComponent(levelId)}` +
+    `&section=${encodeURIComponent(ACTIVE_SECTION.sectionId)}` +
+    `&lesson=${encodeURIComponent(ACTIVE_LESSON.lessonId)}`;
+
+  window.location.href = url;
+});
+
+/* =========================================================
+  7) SIDEBAR VIEWS
+========================================================= */
+function showSectionsView() {
+  $("#sectionsList").style.display = "";
+  $("#lessonsList").style.display = "none";
+  $("#groupsList").style.display = "none";
+  $("#leftTitle").textContent = "الأقسام";
+  $("#lessonsViewBtn").style.display = ACTIVE_SECTION ? "" : "none";
+}
+
+function showLessonsView() {
+  $("#sectionsList").style.display = "none";
+  $("#lessonsList").style.display = "";
+  $("#groupsList").style.display = "none";
+  $("#leftTitle").textContent = "الدروس";
+  $("#lessonsViewBtn").style.display = ACTIVE_SECTION ? "" : "none";
+}
+
+function showGroupsView() {
+  $("#sectionsList").style.display = "none";
+  $("#lessonsList").style.display = "none";
+  $("#groupsList").style.display = "";
+  $("#leftTitle").textContent = "المجموعات";
+  $("#lessonsViewBtn").style.display = ACTIVE_SECTION ? "" : "none";
+}
+
+$("#groupsViewBtn")?.addEventListener("click", () => {
+  $("#groupsList").innerHTML =
+    `<div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">لا توجد مجموعات بعد.</div>`;
+  showGroupsView();
+  if (isMobile()) setMobileMode("sections");
+});
+
+$("#lessonsViewBtn")?.addEventListener("click", () => {
+  if (!ACTIVE_SECTION) return;
+  renderLessonsList(ACTIVE_SECTION);
+  showLessonsView();
+  if (isMobile()) setMobileMode("lessons");
+});
+
+/* Mobile back in sidebar: lessons -> sections */
+$("#backToSectionsBtn")?.addEventListener("click", () => {
+  ACTIVE_LESSON = null;
+  showSectionsView();
+  if (isMobile()) setMobileMode("sections");
+});
+
+/* Mobile back in viewer: viewer -> lessons */
+$("#backToLessonsBtn")?.addEventListener("click", () => {
+  if (!ACTIVE_SECTION) {
+    showSectionsView();
+    if (isMobile()) setMobileMode("sections");
+    return;
+  }
+  renderLessonsList(ACTIVE_SECTION);
+  showLessonsView();
+  if (isMobile()) setMobileMode("lessons");
+});
+
+/* =========================================================
+  8) RENDER SECTIONS + LESSONS
+========================================================= */
+function renderSectionsList() {
+  $("#sectionsList").innerHTML = "";
+
+  if (!SECTIONS.length) {
+    $("#sectionsList").innerHTML =
+      `<div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">لا توجد أقسام.</div>`;
+    return;
+  }
+
+  SECTIONS.forEach(sec => {
+    const el = document.createElement("div");
+    el.className = "sectionItem";
+    el.tabIndex = 0;
+    el.innerHTML = `
+      <div class="sLeft">
+        <div class="sIcon">${sec.sectionIcon || "📚"}</div>
+        <div class="sTxt">
+          <div class="sTitle">${esc(sec.sectionTitle || "قسم")}</div>
+          <div class="sDesc">${esc(sec.sectionDesc || "")}</div>
+        </div>
+      </div>
+      <div class="chev">›</div>
+    `;
+
+    const open = () => selectSection(sec.sectionId);
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        open();
+      }
+    });
+
+    $("#sectionsList").appendChild(el);
+  });
+}
+
+function renderLessonsList(sec) {
+  const wrap = $("#lessonsList");
+  wrap.innerHTML = "";
+
+  const lessons = Array.isArray(sec?.lessons) ? sec.lessons : [];
+
+  if (!lessons.length) {
+    wrap.innerHTML =
+      `<div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">لا توجد دروس.</div>`;
+    return;
+  }
+
+  lessons.forEach((L, i) => {
+    const el = document.createElement("div");
+    el.className = "sectionItem";
+    el.tabIndex = 0;
+    el.dataset.id = L.lessonId;
+
+    el.innerHTML = `
+      <div class="sLeft">
+        <div class="sIcon">▶</div>
+        <div class="sTxt">
+          <div class="sTitle">${i + 1} — ${esc(L.title || "درس")}</div>
+          <div class="sDesc">${esc(L.desc || "اضغط للاختيار")}</div>
+        </div>
+      </div>
+      <div class="chev">›</div>
+    `;
+
+    const open = () => {
+      selectLesson(L.lessonId);
+      if (isMobile()) setMobileMode("viewer");
+    };
+
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        open();
+      }
+    });
+
+    wrap.appendChild(el);
+  });
+
+  if (ACTIVE_LESSON?.lessonId) {
+    document.querySelectorAll("#lessonsList .sectionItem").forEach(item => {
+      const on = item.dataset.id === ACTIVE_LESSON.lessonId;
+      item.style.borderColor = on ? "rgba(47,128,237,.55)" : "";
+      item.style.background = on ? "rgba(47,128,237,.10)" : "";
+    });
+  }
+}
+
+function selectSection(sectionId) {
+  const sec = SECTIONS.find(s => s.sectionId === sectionId);
+  if (!sec) return showToast("تنبيه", "القسم غير موجود");
+
+  ACTIVE_SECTION = sec;
+  ACTIVE_LESSON = null;
+
+  renderLessonsList(sec);
+  showLessonsView();
+
+  if (sec.lessons?.length) selectLesson(sec.lessons[0].lessonId);
+
+  if (isMobile()) setMobileMode("lessons");
+}
+
+/* =========================================================
+  9) LESSON SELECT
+========================================================= */
+function selectLesson(lessonId) {
+  const L = (ACTIVE_SECTION?.lessons || []).find(x => x.lessonId === lessonId);
+  if (!L) return showToast("تنبيه", "الدرس غير موجود");
+
+  ACTIVE_LESSON = L;
+
+  $("#activeLessonTitle").textContent = L.title || "درس";
+  $("#activeLessonDesc").textContent = L.desc || "—";
+
+  prepareFlashcardsForLesson(L);
+
+  enableModeButtons(true);
+  setMode("video");
+
+  if ($("#lessonsList").style.display !== "none") renderLessonsList(ACTIVE_SECTION);
+}
+
+/* =========================================================
+  10) VIEWER DISPATCH
+========================================================= */
+function renderViewer() {
+  if (activeMode === "video") return renderVideoView();
+  return renderFlashView();
+}
+
+/* =========================================================
+  11) VIDEO (Lesson-level video)
+========================================================= */
+function renderVideoView() {
+  const url = ACTIVE_LESSON?.videoUrl;
+  if (!url) {
+    $("#viewer").innerHTML =
+      `<div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">لا يوجد فيديو لهذا الدرس.</div>`;
+    return;
+  }
+
+  $("#viewer").innerHTML = `
+    <div class="videoWrap">
+      <video controls preload="metadata" playsinline src="${esc(url)}"></video>
+    </div>
+  `;
+}
+
+/* =========================================================
+  12) FLASHCARDS (UPDATED)
+  - Front: sound icon next to TEXT if audio exists
+  - Back:  sound icon next to DESC if audio exists
+========================================================= */
+function prepareFlashcardsForLesson(lesson) {
+  const items = Array.isArray(lesson?.items) ? lesson.items : [];
+  FLASH_CARDS = items
+    .filter(it => it && (it.front || it.back))
+    .map(it => ({
+      itemId: it.itemId,
+      front: it.front || {},
+      back: it.back || {}
+    }));
+
+  flashIndex = 0;
+  flashFlipped = false;
+}
+
+function renderFlashView() {
+  if (!FLASH_CARDS.length) {
+    $("#viewer").innerHTML =
+      `<div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">لا توجد فلاش كارد لهذا الدرس.</div>`;
+    return;
+  }
+
+  const total = FLASH_CARDS.length;
+  const idx = ((flashIndex % total) + total) % total;
+
+  const fc = FLASH_CARDS[idx] || {};
+  const front = fc.front || {};
+  const back = fc.back || {};
+  const face = flashFlipped ? back : front;
+
+  const faceVideoUrl = face.videoUrl || "";
+  const showGoQuestions = (idx === total - 1);
+
+  // Robust audio lookup:
+  // Prefer face.audioUrl, then side-specific audioUrl
+  const sideAudioUrl = (face.audioUrl || (flashFlipped ? back.audioUrl : front.audioUrl) || "");
+  const showSound = Boolean(sideAudioUrl);
+
+  $("#viewer").innerHTML = `
+    <div class="viewerScroll">
+
+      <div class="flashSideLabel">${flashFlipped ? "الخلف" : "الأمام"}</div>
+
+      <div class="flashStage">
+        <button class="navArrow prev" id="prevArrow" type="button" aria-label="السابق" title="السابق">‹</button>
+
+        <div class="flashCardSingle" id="flashCard" title="اضغط لقلب البطاقة">
+
+          <div class="flashMedia" id="flashMedia">
+            <video id="cardVideo" class="flashVideo" controls preload="metadata" playsinline></video>
+            <img class="flashImg" id="cardImg" alt="card image"/>
+          </div>
+
+          <!-- TEXT ROW (sound on FRONT only) -->
+          <div class="flashText" id="cardTextRow">
+            <span id="cardText"></span>
+            <button class="soundInlineBtn" id="soundBtnText" type="button" aria-label="تشغيل الصوت" title="تشغيل الصوت">
+              <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <audio id="cardAudio" preload="none"></audio>
+
+          <!-- DESC ROW (sound on BACK only, next to desc) -->
+          <div class="flashDescRow" id="cardDescRow">
+            <span class="flashDesc" id="cardDesc"></span>
+            <button class="soundInlineBtn" id="soundBtnDesc" type="button" aria-label="تشغيل الصوت" title="تشغيل الصوت">
+              <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="hintLine">اضغط البطاقة لقلبها</div>
+        </div>
+
+        <button class="navArrow next" id="nextArrow" type="button" aria-label="التالي" title="التالي">›</button>
+      </div>
+
+      <div class="flashFooter" style="margin-top:12px;">
+        <div class="flashCounter">بطاقة ${idx + 1} من ${total}</div>
+        ${showGoQuestions ? `<button class="miniBtn primary" id="goQuestions" type="button">🧩 ابدأ الأسئلة</button>` : ``}
+      </div>
+    </div>
+  `;
+
+  const videoEl = $("#cardVideo");
+  const imgEl = $("#cardImg");
+  const mediaWrap = $("#flashMedia");
+
+  const audioEl = $("#cardAudio");
+  const soundBtnText = $("#soundBtnText");
+  const soundBtnDesc = $("#soundBtnDesc");
+
+  // image fallback
+  imgEl.src = face.imageUrl || "";
+
+  // video vs image
+  if (faceVideoUrl) {
+    videoEl.src = faceVideoUrl;
+    videoEl.style.display = "";
+    imgEl.style.display = "none";
+  } else {
+    videoEl.removeAttribute("src");
+    videoEl.load();
+    videoEl.style.display = "none";
+    imgEl.style.display = "";
+  }
+
+  $("#cardText").textContent = face.text || "—";
+  $("#cardDesc").textContent = face.desc || "";
+
+  // Setup audio
+  if (showSound) {
+    audioEl.src = sideAudioUrl;
+  } else {
+    audioEl.removeAttribute("src");
+    audioEl.load();
+  }
+
+  // FRONT: show icon next to text
+  soundBtnText.style.display = (!flashFlipped && showSound) ? "inline-flex" : "none";
+  // BACK: show icon next to desc
+  soundBtnDesc.style.display = (flashFlipped && showSound) ? "inline-flex" : "none";
+
+  function playSideAudio(e) {
+    e.stopPropagation(); // prevent flip
+    if (!audioEl.src) return;
+
+    if (videoEl && !videoEl.paused) videoEl.pause();
+    try { audioEl.currentTime = 0; } catch {}
+    audioEl.play().catch(() => {});
+  }
+
+  soundBtnText?.addEventListener("click", playSideAudio);
+  soundBtnDesc?.addEventListener("click", playSideAudio);
+
+  /* -------- prevent flip when interacting with media -------- */
+  mediaWrap?.addEventListener("click", (e) => e.stopPropagation());
+  mediaWrap?.addEventListener("pointerdown", (e) => e.stopPropagation());
+  mediaWrap?.addEventListener("touchstart", (e) => e.stopPropagation(), { passive: true });
+
+  videoEl?.addEventListener("click", (e) => e.stopPropagation());
+  videoEl?.addEventListener("pointerdown", (e) => e.stopPropagation());
+  videoEl?.addEventListener("touchstart", (e) => e.stopPropagation(), { passive: true });
+
+  /* ------------------------- Flip / Nav handlers -------------------------- */
+  $("#flashCard")?.addEventListener("click", (e) => {
+    if (
+      e.target.closest("video") ||
+      e.target.closest("#flashMedia") ||
+      e.target.closest("#soundBtnText") ||
+      e.target.closest("#soundBtnDesc")
+    ) return;
+
+    if (videoEl && !videoEl.paused) videoEl.pause();
+    if (audioEl && !audioEl.paused) audioEl.pause();
+
+    flashFlipped = !flashFlipped;
+    renderFlashView();
+  });
+
+  $("#prevArrow")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (videoEl && !videoEl.paused) videoEl.pause();
+    if (audioEl && !audioEl.paused) audioEl.pause();
+
+    flashIndex = (idx - 1 + total) % total;
+    flashFlipped = false;
+    renderFlashView();
+  });
+
+  $("#nextArrow")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (videoEl && !videoEl.paused) videoEl.pause();
+    if (audioEl && !audioEl.paused) audioEl.pause();
+
+    flashIndex = (idx + 1) % total;
+    flashFlipped = false;
+    renderFlashView();
+  });
+
+  if (showGoQuestions) {
+    $("#goQuestions")?.addEventListener("click", () => {
+      if (!levelId || !ACTIVE_SECTION || !ACTIVE_LESSON) return;
+
+      const url =
+        `${QUESTIONS_PAGE}?level=${encodeURIComponent(levelId)}` +
+        `&section=${encodeURIComponent(ACTIVE_SECTION.sectionId)}` +
+        `&lesson=${encodeURIComponent(ACTIVE_LESSON.lessonId)}`;
+
+      window.location.href = url;
+    });
+  }
+}
+
+/* =========================================================
+  13) DATA LOADING
+========================================================= */
+function normalize(raw) { return raw || {}; }
+
+function findLevel(d, id) {
+  const levels = Array.isArray(d?.levels) ? d.levels : [];
+  const key = String(id || "").toLowerCase();
+  return levels.find(l => String(l.levelId || "").toLowerCase() === key) || null;
+}
+
+async function loadFromFile() {
+  if (!levelId) {
+    DATA = null;
+    LEVEL = null;
+    SECTIONS = [];
+    ACTIVE_SECTION = null;
+    ACTIVE_LESSON = null;
+
+    renderSectionsList();
+    enableModeButtons(false);
+
+    $("#welcomeTitle").textContent = "أقسام المستوى";
+    $("#viewer").innerHTML = `
+      <div class="viewerScroll" style="color:var(--muted);font-weight:900;line-height:1.8;">
+        الرجاء فتح الصفحة بهذه الصيغة:<br/>
+        <span dir="ltr" style="font-family:monospace;">sections.html?level=preliminary</span>
+      </div>
+    `;
+
+    showSectionsView();
+    syncMobileDefaultView();
+    showToast("تنبيه", "لم يتم تحديد مستوى في الرابط (?level=...)");
+    return;
+  }
+
+  try {
+    const res = await fetch(DATA_FILE, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    DATA = normalize(await res.json());
+
+    if (DATA?.uiDefaults) {
+      if (typeof DATA.uiDefaults.rtl === "boolean") {
+        document.documentElement.dir = DATA.uiDefaults.rtl ? "rtl" : "ltr";
+      }
+      if (DATA.uiDefaults.lang) {
+        document.documentElement.lang = DATA.uiDefaults.lang;
+      }
+    }
+
+    LEVEL = findLevel(DATA, levelId);
+
+    if (!LEVEL) {
+      SECTIONS = [];
+      renderSectionsList();
+      enableModeButtons(false);
+      showSectionsView();
+      syncMobileDefaultView();
+      showToast("تنبيه", `المستوى (${levelId}) غير موجود.`);
+      return;
+    }
+
+    SECTIONS = Array.isArray(LEVEL.sections)
+      ? LEVEL.sections.map(sec => ({
+        ...sec,
+        sectionId: String(sec.sectionId || "").toLowerCase(),
+        lessons: Array.isArray(sec.lessons)
+          ? sec.lessons.map(l => ({
+            ...l,
+            lessonId: String(l.lessonId || "").toLowerCase()
+          }))
+          : []
+      }))
+      : [];
+
+    $("#welcomeTitle").textContent = LEVEL.levelTitle || "أقسام المستوى";
+
+    renderSectionsList();
+    enableModeButtons(false);
+
+    ACTIVE_SECTION = null;
+    ACTIVE_LESSON = null;
+    showSectionsView();
+    syncMobileDefaultView();
+
+  } catch {
+    DATA = null;
+    LEVEL = null;
+    SECTIONS = [];
+    renderSectionsList();
+    enableModeButtons(false);
+    showSectionsView();
+    syncMobileDefaultView();
+    showToast("خطأ", "تعذر تحميل ملف البيانات.");
+  }
+}
+
+/* =========================================================
+  14) TOP NAV
+========================================================= */
+$("#reloadBtn")?.addEventListener("click", loadFromFile);
+
+/* =========================================================
+  15) START
+========================================================= */
+loadFromFile();
+syncMobileDefaultView();
+</script>
+</body>
+
+</html>

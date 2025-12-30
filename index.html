@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>لوحة الطفل</title>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root{
+      --bg:#F7FBFF;
+      --surface:#ffffff;
+      --text:#1F2A44;
+      --muted:#6B7280;
+      --primary:#2F80ED;
+      --success:#27AE60;
+      --warning:#F2C94C;
+
+      --r:18px;
+      --shadow:0 12px 26px rgba(31,42,68,.12);
+      --shadow2:0 6px 14px rgba(31,42,68,.10);
+      --ring:0 0 0 4px rgba(47,128,237,.18);
+
+      --max:1180px;
+      --gap:16px;
+      --pad:18px;
+
+      --barRadius: calc(var(--r) + 14px);
+      --pillRadius: 999px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+      background:
+        radial-gradient(900px 520px at 10% -10%, rgba(86,204,242,.30), transparent 60%),
+        radial-gradient(900px 520px at 95% 0%, rgba(187,107,217,.24), transparent 55%),
+        radial-gradient(900px 520px at 50% 110%, rgba(111,207,151,.22), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* blobs */
+    .blob{
+      position:fixed;
+      width:320px;height:320px;
+      border-radius:999px;
+      opacity:.18;
+      pointer-events:none;
+      z-index:0;
+      animation:float 10s ease-in-out infinite;
+    }
+    .blob.b1{background:rgba(47,128,237,.65);top:-100px;right:-120px;}
+    .blob.b2{background:rgba(39,174,96,.60);bottom:-120px;left:-130px;animation-duration:12s;}
+    .blob.b3{background:rgba(242,201,76,.70);top:35%;left:-140px;animation-duration:14s;}
+    @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(14px,22px)}}
+
+    /* shell */
+    .app-shell{position:relative;z-index:1;min-height:100vh;display:flex;}
+    .container{
+      width:100%;
+      max-width:var(--max);
+      margin:0 auto;
+      padding:var(--pad);
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+      min-height:100vh;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+    .appbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter: blur(10px);
+
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(31,42,68,.08);
+      box-shadow: var(--shadow2);
+      border-radius: var(--barRadius);
+      padding: 12px;
+
+      display:grid;
+      grid-template-columns: auto 1fr auto; /* profile | stats | title */
+      align-items:center;
+      gap: 12px;
+    }
+
+    /* Profile */
+    .profileBox{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .avatarImg{
+      width:52px;height:52px;
+      border-radius:18px;
+      object-fit:cover;
+      border:1px solid rgba(31,42,68,.10);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      flex:0 0 auto;
+    }
+
+    .profileMeta{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+      align-items:flex-start;
+    }
+
+    .profileMeta .name{
+      font-size:14px;
+      font-weight:1000;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 22ch;
+    }
+
+    .profileMeta .badge{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .profileMeta .badge .dot{
+      width:8px;height:8px;border-radius:999px;
+      background:rgba(242,201,76,.95);
+      box-shadow: 0 0 0 4px rgba(242,201,76,.18);
+      flex:0 0 auto;
+    }
+
+    /* Title */
+    .titleBox{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      min-width:0;
+    }
+
+    .titleBox h1{
+      margin:0;
+      font-size:18px;
+      font-weight:1000;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* Stats (center) */
+    .stats{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      min-width:0;
+    }
+
+    .statChip{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius: var(--pillRadius);
+      box-shadow:none;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(31,42,68,.10);
+      font-weight:1000;
+      white-space:nowrap;
+      user-select:none;
+    }
+
+    .statChip .ico{
+      width:30px;height:30px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(31,42,68,.08);
+      background: rgba(31,42,68,.04);
+      flex:0 0 auto;
+      font-size:14px;
+    }
+
+    .statChip.stars .ico{ background: rgba(242,201,76,.20); }
+    .statChip.groups .ico{ background: rgba(111,207,151,.16); }
+
+    .statChip .txt{
+      display:flex;
+      flex-direction:column;
+      gap:1px;
+      line-height:1.1;
+    }
+
+    .statChip .txt small{
+      font-size:10px;
+      color:var(--muted);
+      font-weight:900;
+    }
+
+    /* Mobile menu button */
+    .menuBtn{
+      display:none;
+      width:46px;height:46px;
+      border-radius:16px;
+      border:1px solid rgba(31,42,68,.10);
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      flex:0 0 auto;
+    }
+    .menuBtn:focus{ box-shadow: var(--shadow2), var(--ring); outline:none; }
+
+    /* Mobile: show menu + keep profile visible next to it */
+    @media (max-width:560px){
+      .appbar{
+        grid-template-columns: auto 1fr auto; /* menu+profile | spacer | title */
+        align-items:center;
+      }
+
+      .menuBtn{ display:flex; }
+
+      /* Make left side (in RTL) compact: menu + profile */
+      .leftCluster{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        min-width:0;
+      }
+
+      /* Hide center stats from header on mobile (move to drawer) */
+      .stats{ display:none; }
+
+      .appbar{padding:10px}
+      .avatarImg{width:46px;height:46px;border-radius:16px;}
+      .profileMeta .badge{font-size:11.5px;}
+    }
+
+    /* =========================================================
+       Welcome
+       ========================================================= */
+    .welcomeText{ padding: 2px 2px 0; }
+    .welcomeText h2{
+      margin:0 0 6px 0;
+      font-size:22px;
+      font-weight:1000;
+      line-height:1.2;
+    }
+    .welcomeText p{
+      margin:0;
+      color:var(--muted);
+      font-weight:900;
+      font-size:13.5px;
+      line-height:1.7;
+      max-width: 90ch;
+    }
+
+    /* =========================================================
+       Cards grid
+       ========================================================= */
+    .content{
+      flex:1;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+    }
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(220px, 1fr));
+      gap:var(--gap);
+      align-items:stretch;
+    }
+    @media (max-width:1100px){
+      .cards-grid{grid-template-columns:repeat(2, minmax(220px, 1fr));}
+    }
+    @media (max-width:560px){
+      .cards-grid{grid-template-columns:repeat(2, minmax(0, 1fr));}
+    }
+
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(31,42,68,.10);
+      box-shadow:var(--shadow);
+      border-radius:22px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      cursor:pointer;
+      user-select:none;
+      transition:transform .14s ease, box-shadow .14s ease;
+      outline:none;
+      min-height:190px;
+    }
+    .card:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(31,42,68,.14)}
+    .card:active{transform:scale(.995)}
+    .card:focus{box-shadow:var(--shadow), var(--ring)}
+
+    .cardTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .logo{
+      width:52px;height:52px;
+      border-radius:18px;
+      border:1px solid rgba(31,42,68,.10);
+      display:grid;place-items:center;
+      font-size:22px;
+      box-shadow:var(--shadow2);
+    }
+    .tag{
+      font-size:12px;
+      font-weight:950;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(31,42,68,.05);
+      border:1px solid rgba(31,42,68,.08);
+      color:rgba(31,42,68,.70);
+      white-space:nowrap;
+    }
+    .cardTitle{margin:0;font-size:15px;font-weight:1000}
+    .cardDesc{
+      margin:0;
+      color:var(--muted);
+      font-weight:900;
+      font-size:12.5px;
+      line-height:1.65;
+    }
+
+    .cardBottom{
+      margin-top:auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .progress{
+      height:10px;
+      border-radius:999px;
+      background:rgba(31,42,68,.08);
+      border:1px solid rgba(31,42,68,.08);
+      overflow:hidden;
+    }
+    .progress > div{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(47,128,237,.95), rgba(111,207,151,.90));
+      width:0%;
+      transition:width .2s ease;
+    }
+    .go{
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:1000;
+      background:rgba(47,128,237,.12);
+      color:var(--primary);
+      border:1px solid rgba(47,128,237,.18);
+      box-shadow:var(--shadow2);
+      transition:transform .12s ease, box-shadow .12s ease;
+      align-self:flex-start;
+    }
+    .go:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(31,42,68,.12)}
+    .go:active{transform:scale(.99)}
+
+    /* =========================================================
+       Drawer
+       - Content should look like header content (NOT buttons)
+       ========================================================= */
+    .drawerOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(31,42,68,.38);
+      backdrop-filter: blur(2px);
+      z-index:999;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+    }
+    .drawerOverlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .drawer{
+      position:fixed;
+      top:0; bottom:0;
+      right:0;
+      width:min(88vw, 380px);
+      background: rgba(255,255,255,.96);
+      border-left: 1px solid rgba(31,42,68,.10);
+      box-shadow: 0 18px 40px rgba(31,42,68,.18);
+      z-index:1000;
+
+      transform: translateX(105%);
+      transition: transform .22s ease;
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawerHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding-bottom:10px;
+      border-bottom:1px solid rgba(31,42,68,.08);
+    }
+    .drawerTitle{
+      font-weight:1000;
+      font-size:14px;
+    }
+    .closeBtn{
+      width:44px;height:44px;
+      border-radius:16px;
+      border:1px solid rgba(31,42,68,.10);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+    }
+
+    /* Drawer "header-like" block */
+    .drawerTop{
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(31,42,68,.08);
+      box-shadow: var(--shadow2);
+      border-radius: 22px;
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .drawerRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      min-width:0;
+    }
+
+    .drawerTop .titleBox{
+      justify-content:flex-start;
+    }
+    .drawerTop h1{
+      font-size:16px;
+    }
+
+    /* Stats inside drawer should be "content", not button-like */
+    .drawerStats{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .drawerStatLine{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(31,42,68,.10);
+      background: rgba(31,42,68,.03);
+      font-weight:1000;
+    }
+    .drawerStatLine .left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .drawerStatLine .ico{
+      width:34px;height:34px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(31,42,68,.08);
+      background:#fff;
+      flex:0 0 auto;
+      font-size:15px;
+    }
+    .drawerStatLine small{
+      display:block;
+      font-size:11px;
+      color:var(--muted);
+      font-weight:900;
+      margin-top:1px;
+    }
+
+    /* Tablet header rearrangement (keep your existing behavior) */
+    @media (max-width: 820px) and (min-width: 561px){
+      .appbar{
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "title profile"
+          "stats stats";
+        row-gap: 10px;
+      }
+      .titleBox{grid-area:title; justify-content:flex-start;}
+      .profileBox{grid-area:profile; justify-content:flex-end;}
+      .stats{grid-area:stats; justify-content:flex-start;}
+      .statChip{padding:8px 10px;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <!-- Drawer Overlay + Drawer -->
+  <div class="drawerOverlay" id="drawerOverlay" aria-hidden="true"></div>
+
+  <aside class="drawer" id="mobileDrawer" aria-label="قائمة الهاتف" aria-hidden="true">
+    <div class="drawerHeader">
+      <div class="drawerTitle">القائمة</div>
+      <button class="closeBtn" id="closeDrawerBtn" type="button" aria-label="إغلاق القائمة">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <!-- Header-like content inside drawer (NOT button cards) -->
+    <div class="drawerTop" aria-label="محتوى الهيدر داخل القائمة">
+      <div class="drawerRow">
+        <div class="profileBox" aria-label="الملف الشخصي (داخل القائمة)">
+          <img
+            class="avatarImg"
+            id="drawerAvatarImg"
+            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=70"
+            alt="صورة الملف الشخصي"
+          />
+          <div class="profileMeta">
+            <div class="name" id="drawerChildName">سارة</div>
+            <div class="badge"><span class="dot"></span><span id="drawerBadgeName">شارة البداية</span></div>
+          </div>
+        </div>
+
+        <div class="titleBox" aria-label="العنوان (داخل القائمة)">
+          <h1 id="drawerPageTitle" style="margin:0;font-weight:1000;">لوحة الطفل</h1>
+        </div>
+      </div>
+
+      <div class="drawerStats" aria-label="الإحصائيات (داخل القائمة)">
+        <div class="drawerStatLine" aria-label="النجوم">
+          <div class="left">
+            <div class="ico" aria-hidden="true"><i class="bi bi-star-fill"></i></div>
+            <div>
+              <div><span id="drawerStarsNo">١٢</span> نجمة</div>
+              <small>رصيدي</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawerStatLine" aria-label="المجموعات">
+          <div class="left">
+            <div class="ico" aria-hidden="true"><i class="bi bi-people-fill"></i></div>
+            <div>
+              <div><span id="drawerGroupsNo">٢</span> مجموعات</div>
+              <small>أصدقائي</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="color:var(--muted);font-weight:900;font-size:12.5px;line-height:1.7;">
+      في الهاتف: الملف الشخصي يبقى ظاهرًا في الهيدر، والإحصائيات تظهر هنا داخل القائمة بشكل محتوى متناسق.
+    </div>
+  </aside>
+
+  <main class="app-shell">
+    <div class="container">
+
+      <!-- HEADER -->
+      <header class="appbar" aria-label="الهيدر">
+        <!-- Mobile cluster: menu + profile (visible on mobile) -->
+        <div class="leftCluster" aria-label="القائمة والملف الشخصي">
+          <button class="menuBtn" id="menuBtn" type="button" aria-label="فتح القائمة" aria-controls="mobileDrawer" aria-expanded="false">
+            <i class="bi bi-list" aria-hidden="true"></i>
+          </button>
+
+          <!-- Profile (always visible, including mobile) -->
+          <div class="profileBox" aria-label="الملف الشخصي">
+            <img
+              class="avatarImg"
+              id="avatarImg"
+              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&h=256&q=70"
+              alt="صورة الملف الشخصي"
+            />
+            <div class="profileMeta">
+              <div class="name" id="childName">سارة</div>
+              <div class="badge"><span class="dot"></span><span id="badgeName">شارة البداية</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats (Center) - hidden on mobile, shown on tablet/desktop -->
+        <div class="stats" aria-label="الإحصائيات">
+          <div class="statChip stars" aria-label="النجوم">
+            <div class="ico" aria-hidden="true"><i class="bi bi-star-fill"></i></div>
+            <div class="txt">
+              <div><span id="starsNo">١٢</span> نجمة</div>
+              <small>رصيدي</small>
+            </div>
+          </div>
+
+          <div class="statChip groups" aria-label="المجموعات">
+            <div class="ico" aria-hidden="true"><i class="bi bi-people-fill"></i></div>
+            <div class="txt">
+              <div><span id="groupsNo">٢</span> مجموعات</div>
+              <small>أصدقائي</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Title (Left) -->
+        <div class="titleBox" aria-label="العنوان">
+          <h1 id="pageTitle">لوحة الطفل</h1>
+        </div>
+      </header>
+
+      <!-- Welcome (plain text) -->
+      <section class="welcomeText" aria-label="رسالة ترحيب">
+        <h2 id="welcomeTitle">مرحبًا</h2>
+        <p id="welcomeSubtitle">اختر مستوى لتبدأ اللعب والتعلم. اضغط على أي بطاقة لتذهب إلى صفحة القسم.</p>
+      </section>
+
+      <!-- Levels -->
+      <section class="content" aria-label="المستويات">
+        <div class="cards-grid" id="levelsGrid"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    const CONTENT = {
+      levels: [
+        {
+          levelId: "preliminary",
+          name: "التمهيدي",
+          tag: "تمهيدي",
+          desc: "تعرّف على الحروف والأرقام والألوان بطريقة سهلة جدًا.",
+          logo: "🧸",
+          logoBg: "rgba(242,201,76,.18)",
+          progress: 20,
+          targetPage: "sections.html"
+        },
+        {
+          levelId: "basic",
+          name: "الأساسي",
+          tag: "أساسي",
+          desc: "تمارين تفاعلية وفلاش كاردز للحروف والأرقام والأشكال.",
+          logo: "📚",
+          logoBg: "rgba(47,128,237,.14)",
+          progress: 45,
+          targetPage: "sections.html"
+        },
+        {
+          levelId: "intermediate",
+          name: "المتوسط",
+          tag: "متوسط",
+          desc: "كلمات قصيرة وحساب بسيط وقصص سمعية ممتعة.",
+          logo: "🧠",
+          logoBg: "rgba(111,207,151,.16)",
+          progress: 0,
+          targetPage: "sections.html"
+        },
+        {
+          levelId: "advanced",
+          name: "المتقدم",
+          tag: "متقدم",
+          desc: "قراءة جمل وحساب حتى 50 وتفكير منطقي.",
+          logo: "🚀",
+          logoBg: "rgba(187,107,217,.16)",
+          progress: 0,
+          targetPage: "sections.html"
+        }
+      ]
+    };
+
+    function renderLevels(){
+      const grid = document.querySelector("#levelsGrid");
+      grid.innerHTML = "";
+
+      CONTENT.levels.forEach(L=>{
+        const card = document.createElement("div");
+        card.className = "card";
+        card.tabIndex = 0;
+
+        const url = `${L.targetPage}?level=${encodeURIComponent(L.levelId)}`;
+
+        card.innerHTML = `
+          <div class="cardTop">
+            <div class="logo" style="background:${L.logoBg}">${L.logo}</div>
+            <div class="tag">${L.tag}</div>
+          </div>
+
+          <div class="cardMid">
+            <h3 class="cardTitle">${L.name}</h3>
+            <p class="cardDesc">${L.desc}</p>
+          </div>
+
+          <div class="cardBottom">
+            <div class="progress" aria-label="التقدم"><div style="width:${L.progress}%"></div></div>
+            <button class="go" type="button">${L.progress > 0 ? "تابع" : "ابدأ"}</button>
+          </div>
+        `;
+
+        const navigate = () => { window.location.href = url; };
+
+        card.addEventListener("click", navigate);
+        card.querySelector(".go").addEventListener("click", (e)=>{ e.stopPropagation(); navigate(); });
+        card.addEventListener("keydown", (e)=>{
+          if (e.key === "Enter" || e.key === " "){ e.preventDefault(); navigate(); }
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    renderLevels();
+
+    /* =========================
+       Drawer logic
+       ========================= */
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileDrawer = document.getElementById("mobileDrawer");
+    const overlay = document.getElementById("drawerOverlay");
+    const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+
+    function syncDrawerContent(){
+      document.getElementById("drawerChildName").textContent =
+        document.getElementById("childName").textContent;
+
+      document.getElementById("drawerBadgeName").textContent =
+        document.getElementById("badgeName").textContent;
+
+      document.getElementById("drawerStarsNo").textContent =
+        document.getElementById("starsNo").textContent;
+
+      document.getElementById("drawerGroupsNo").textContent =
+        document.getElementById("groupsNo").textContent;
+
+      document.getElementById("drawerPageTitle").textContent =
+        document.getElementById("pageTitle").textContent;
+
+      const avatarSrc = document.getElementById("avatarImg").getAttribute("src");
+      document.getElementById("drawerAvatarImg").setAttribute("src", avatarSrc);
+    }
+
+    function openDrawer(){
+      syncDrawerContent();
+      mobileDrawer.classList.add("open");
+      overlay.classList.add("open");
+
+      mobileDrawer.setAttribute("aria-hidden", "false");
+      overlay.setAttribute("aria-hidden", "false");
+      menuBtn.setAttribute("aria-expanded", "true");
+
+      document.body.style.overflow = "hidden";
+
+      // Focus close for accessibility
+      closeDrawerBtn.focus();
+    }
+
+    function closeDrawer(){
+      mobileDrawer.classList.remove("open");
+      overlay.classList.remove("open");
+
+      mobileDrawer.setAttribute("aria-hidden", "true");
+      overlay.setAttribute("aria-hidden", "true");
+      menuBtn.setAttribute("aria-expanded", "false");
+
+      document.body.style.overflow = "";
+      menuBtn.focus();
+    }
+
+    menuBtn.addEventListener("click", openDrawer);
+    closeDrawerBtn.addEventListener("click", closeDrawer);
+    overlay.addEventListener("click", closeDrawer);
+
+    document.addEventListener("keydown", (e)=>{
+      if (e.key === "Escape" && mobileDrawer.classList.contains("open")){
+        closeDrawer();
+      }
+    });
+  </script>
+</body>
+</html>
