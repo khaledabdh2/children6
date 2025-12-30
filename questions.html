@@ -11,6 +11,9 @@
 
 
   <style>
+/* =========================================================
+   DESKTOP / PC (DEFAULT)
+   ========================================================= */
 :root{
   --bg1:#f6f7fb; --bg2:#eef2ff;
   --ink:#0f172a; --muted:rgba(15,23,42,.62);
@@ -21,7 +24,7 @@
   --r-xl: clamp(18px, 1.8vw, 28px);
 
   /* classification card height (desktop/base) */
-  --clsCardH: clamp(140px, 22vw, 190px);
+  --clsCardH: clamp(110px, 15vh, 150px);
 
   --fs0: clamp(12px, .25vw + 11px, 14px);
   --fs1: clamp(14px, .35vw + 13px, 16.5px);
@@ -36,7 +39,6 @@
 
   /* Choice */
   --choiceAR: 4 / 3;
-  --choiceAR_mobile: 16 / 11;
 
   /* MATCH */
   --matchImgH: clamp(72px, 12vw, 120px);
@@ -52,6 +54,18 @@
 
   /* unified icon btn size */
   --iconBtn: 42px;
+
+  /* Mobile helpers (defaults overridden in mobile query) */
+  --vvh: 100dvh;
+  --appPad: 0px;
+  --topBarH: 0px;
+  --stagePad: 10px;
+
+  --choiceMobileImgH: 110px;
+
+  /* Tall mobile list budget */
+  --tallListMax: 60vh;
+  --matchRowH: var(--matchImgH);
 }
 
 html,body{height:100%}
@@ -78,10 +92,6 @@ body{
   display:flex;
   flex-direction:column;
   min-height:calc(100vh - (var(--pad) * 2));
-}
-@media (max-width:768px){
-  .appWrap{padding:0}
-  .app{border-radius:0; min-height:100vh;}
 }
 
 .topBar{
@@ -149,9 +159,6 @@ body{
   align-items:center;
   justify-self:end;
   margin-top:0;
-}
-@media (max-width:767.98px){
-  #topMeta{display:none !important;}
 }
 
 .pill{
@@ -250,19 +257,7 @@ body{
   width:fit-content;
   min-width:clamp(180px, 24vw, 320px);
   max-width:100%;
-}/* Classification items: never exceed column width (prevents horizontal scroll on mobile) */
-#clsItems .cardBtn{
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
 }
-
-/* Ensure children can shrink instead of forcing overflow */
-#clsItems .cardLeft,
-#clsItems .clsTitleRow{
-  min-width: 0 !important;
-}
-
 .cardBtn:active{transform:scale(.995)}
 .cardBtn[data-selected="1"]{
   border-color:rgba(59,130,246,.55);
@@ -316,21 +311,16 @@ body{
 .iconBtn i{font-size:20px; line-height:1}
 
 /* ==============================
-   CHOICE
+   CHOICE (DESKTOP)
    ============================== */
 .choiceGrid{
   display:grid;
   gap:var(--gap);
-  grid-template-columns:repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  grid-template-columns:repeat(4, 1fr); /* PC: 4 */
   align-items:stretch;
   justify-items:stretch;
   min-height:0;
 }
-@media (min-width:992px){ .choiceGrid{grid-template-columns:repeat(4, 1fr);} }
-@media (min-width:768px) and (max-width:991.98px){ .choiceGrid{grid-template-columns:repeat(3, 1fr);} }
-@media (max-width:767.98px){ .choiceGrid{grid-template-columns:repeat(2, 1fr);} }
-@media (max-width:520px){ .choiceGrid{grid-template-columns:1fr;} }
-
 .choiceCard{
   width:100% !important;
   min-width:0 !important;
@@ -355,57 +345,12 @@ body{
   aspect-ratio:var(--choiceAR);
   flex:0 0 auto;
 }
-@media (max-width:520px){
-  .choiceImgWrap{aspect-ratio:var(--choiceAR_mobile);
-  
-  }
-}
-/* ==============================
-   ORDERING — MOBILE: shrink arrow icons + number box
-   keep images unchanged
-   ============================== */
-@media (max-width:520px){
-
-  /* smaller number box */
-  .orderIdx{
-    width:28px !important;
-    height:28px !important;
-    border-radius:10px !important;
-    font-size:12px !important;
-  }
-
-  /* smaller up/down icon buttons (only in ordering rows) */
-  #orderList .iconBtn{
-    width:28px !important;
-    height:28px !important;
-    border-radius:10px !important;
-    padding:0 !important;
-  }
-  #orderList .iconBtn i{
-    font-size:16px !important;
-  }
-
-  /* make the right-side controls take less space */
-  #orderList [data-orderid] .d-flex.gap-2.align-items-center{
-    gap:6px !important;
-  }
-
-  /* give text more room without touching the image size */
-  #orderList .cardLeft{
-    gap:8px !important;
-  }
-  #orderList .cardText{
-    max-width:100% !important;
-    -webkit-line-clamp:2 !important;
-  }
-}
-
 .choiceImg{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
-  object-fit:contain;
+  object-fit:contain; /* responsive inside container */
   object-position:center;
   display:block;
   background:rgba(15,23,42,.03);
@@ -430,39 +375,9 @@ body{
   max-width:46ch;
 }
 
-/* Exists in HTML but kept OFF on mobile (your approved behavior) */
-.choiceMetaMobile{
-  display:none;
-  position:absolute;
-  left:10px; right:10px; bottom:10px;
-  background:rgba(255,255,255,.92);
-  border:1px solid rgba(15,23,42,.10);
-  border-radius:14px;
-  padding:8px 10px;
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-}
-.choiceNameMobile{
-  font-weight:1000;
-  font-size:var(--fs1);
-  line-height:1.2;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  flex:1;
-  min-width:0;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.choiceMetaMobile .iconBtn{flex:0 0 auto; padding:0;}
+/* Exists in HTML but OFF by default */
+.choiceMetaMobile{display:none;}
 
-/* ==============================
-   LISTS + DROP ZONES
-   ============================== */
 .vList{display:flex; flex-direction:column; gap:var(--gap); align-items:stretch;}
 
 .dropZone{
@@ -519,21 +434,16 @@ body{
   justify-content:flex-start;
 }
 .footerControls .btnKid{flex:0 0 auto;}
-@media (max-width:520px){
-  .footerControls .btnKid{flex:1 1 auto;}
-}
 
 .grid2_1{
   display:grid;
   gap:var(--gap);
-  grid-template-columns:1fr;
+  grid-template-columns:2fr 1fr; /* PC: two columns */
   align-items:stretch;
   min-height:0;
 }
-@media (min-width:992px){
-  .grid2_1{grid-template-columns:2fr 1fr;}
-}
 
+/* Canvases responsive in container */
 .paintCanvas,.traceCanvas{
   width:100%;
   display:block;
@@ -554,51 +464,8 @@ body{
 }
 .swatch[data-selected="1"]{outline:4px solid rgba(59,130,246,.55); outline-offset:2px;}
 
-.toastKid{
-  position:fixed;
-  left:16px;
-  bottom:16px;
-  z-index:3000;
-  width:min(380px, calc(100% - 32px));
-  background:rgba(255,255,255,.96);
-  border:1px solid rgba(15,23,42,.12);
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  padding:12px;
-  display:none;
-  gap:10px;
-  align-items:center;
-  justify-content:space-between;
-}
-.toastKid.show{display:flex;}
-.toastKid b{font-weight:1000}
-
-.correctPulse{animation:correctPulse .6s ease-out;}
-@keyframes correctPulse{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
-.wrongShake{animation:wrongShake .45s ease-in-out;}
-@keyframes wrongShake{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-6px)}
-  50%{transform:translateX(6px)}
-  75%{transform:translateX(-4px)}
-  100%{transform:translateX(0)}
-}
-.starBurst{
-  position:fixed; inset:0;
-  pointer-events:none;
-  display:grid; place-items:center;
-  z-index:4000;
-  font-size:52px;
-  animation:burst .7s ease-out forwards;
-}
-@keyframes burst{
-  0%{opacity:0; transform:scale(.6)}
-  40%{opacity:1; transform:scale(1.2)}
-  100%{opacity:0; transform:scale(1.6)}
-}
-
 /* ==============================
-   MATCH — TWO COLUMNS + FULL IMAGE DISPLAY
+   MATCH (PC)
    ============================== */
 .pairGrid{
   display:flex;
@@ -612,7 +479,7 @@ body{
   display:flex;
   width:100%;
   align-items:stretch;
-  gap:clamp(8px, 6vw, 56px);
+  gap:clamp(24px, 6vw, 72px);
 }
 .pairRow > .cardBtn{
   flex:0 0 50%;
@@ -634,18 +501,7 @@ body{
   justify-content:center;
   gap:0;
 }
-
 .matchLeftImg{
-  width:clamp(56px, 6.2vw, 88px);
-  height:clamp(56px, 6.2vw, 88px);
-  border-radius:18px;
-  border:1px solid rgba(15,23,42,.10);
-  background:rgba(15,23,42,.03);
-  object-fit:cover;
-  flex:0 0 auto;
-}
-
-.pairRow [data-left] .matchLeftImg{
   width:100% !important;
   height:100% !important;
   display:block;
@@ -655,18 +511,6 @@ body{
   background:rgba(15,23,42,.03);
   border-radius:inherit;
 }
-
-.pairRow [data-left] .cardText{
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  text-align:center;
-  font-weight:1000;
-  padding:10px 12px;
-  white-space:normal;
-}
-
 .pairRow [data-right]{
   display:flex;
   align-items:center;
@@ -690,15 +534,9 @@ body{
   -webkit-line-clamp:2;
   -webkit-box-orient:vertical;
 }
-@media (max-width:520px){
-  .pairRow{gap:clamp(6px, 3vw, 10px);}
-}
-@media (min-width:992px){
-  .pairRow{gap:clamp(24px, 6vw, 72px);}
-}
 
 /* ==============================
-   DRAG & DROP + CLASSIFICATION — TWO COLUMNS ALWAYS
+   DRAG & DROP + CLASSIFICATION (PC)
    ============================== */
 .twoColGrid{
   display:grid;
@@ -709,13 +547,10 @@ body{
 }
 .twoColGrid > .panelKid{min-width:0 !important; height:100%;}
 .twoColGrid .panelFlex{min-height:0;}
-.twoColGrid .panelBodyGrow{
-  min-height:0;
-  overflow:auto;
-  -webkit-overflow-scrolling:touch;
-}
+.twoColGrid .panelBodyGrow{min-height:0; overflow:auto; -webkit-overflow-scrolling:touch;}
+.twoColGrid .panelBodyGrow{ overflow: visible !important; } /* PC: no nested scroll issues */
 
-/* DRAG & DROP — HEIGHT SYNC + FULL IMAGES */
+/* DRAG & DROP — PC */
 #ddLeft .cardBtn{
   width:100% !important;
   min-width:0 !important;
@@ -786,35 +621,113 @@ body{
   text-overflow:ellipsis;
 }
 
-/* CLASSIFICATION — REMOVABLE CHIPS */
-.clsChip{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 10px;
-  border-radius:999px;
-  font-weight:1000;
-  font-size:var(--fs0);
-  background:rgba(59,130,246,.08);
-  border:1px solid rgba(59,130,246,.18);
-  line-height:1;
-}
-.clsX{
-  width:var(--chipX);
-  height:var(--chipX);
-  border-radius:999px;
-  border:1px solid rgba(15,23,42,.14);
-  background:rgba(255,255,255,.95);
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  font-weight:1000;
-  box-shadow:0 6px 12px rgba(15,23,42,.08);
-  flex:0 0 auto;
-}
-.clsX:active{transform:scale(.98)}
+/* CLASSIFICATION — PC */
+#clsItems .cardBtn{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
 
-/* ORDERING — OPTIONS WIDTH (70%) */
+  height: var(--clsCardH);
+  min-height: var(--clsCardH);
+  max-height: var(--clsCardH);
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+
+  padding:10px;
+  justify-content:flex-start !important;
+}
+#clsCats .dropZone{
+  min-height: var(--clsCardH);
+  height: auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+#clsItems .cardImg{
+  width:100%;
+  height: calc(var(--clsCardH) - 46px);
+  object-fit:contain;
+  border-radius:18px;
+  margin-bottom:5px;
+}
+#clsItems .clsTitleRow{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  margin-top:-14px;
+  min-width:0;
+}
+#clsItems .clsTitleRow .cardText{
+  margin:0 !important;
+  font-weight:1000;
+  font-size:var(--fs1);
+  text-align:center;
+  max-width:70%;
+  min-width:0;
+  flex:0 1 auto;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#clsItems .clsTitleRow .cardSide{
+  width:auto !important;
+  margin:0 !important;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#clsItems .cardLeft{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+#clsItems .iconBtn{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+}
+#clsItems .iconBtn i{font-size:18px;}
+
+/* XL desktop classification horizontal layout */
+@media (min-width: 1280px){
+  #clsItems .cardBtn{
+    flex-direction:row !important;
+    align-items:center !important;
+    gap:12px;
+  }
+  #clsItems .cardLeft{
+    flex-direction:row !important;
+    align-items:center !important;
+    width:50%;
+    gap:32px;
+  }
+  #clsItems .cardImg{
+    flex:1 1 auto !important;
+    width:50% !important;
+    height:50% !important;
+    object-fit:contain;
+  }
+  #clsItems .clsTitleRow{
+    flex:0 0 auto !important;
+    justify-content:flex-start !important;
+    margin-top:0 !important;
+    max-width:50%;
+    gap:30px;
+  }
+  #clsItems .clsTitleRow .cardText{
+    max-width:100%;
+    text-align:right;
+  }
+}
+
+/* ORDERING — PC width */
 #orderList{
   display:flex;
   flex-direction:column;
@@ -828,45 +741,390 @@ body{
 }
 
 /* ==============================
-   MOBILE CONSOLIDATION (<=520px)
+   VISUAL EFFECTS (ALL)
    ============================== */
-@media (max-width:520px){
+.correctPulse{
+  animation: correctPulse .6s ease-out;
+  outline: 4px solid rgba(34,197,94,.45);
+  box-shadow: 0 14px 30px rgba(34,197,94,.20);
+}
+@keyframes correctPulse{
+  0%{ transform: scale(1); }
+  35%{ transform: scale(1.03); }
+  100%{ transform: scale(1); }
+}
+.wrongShake{
+  animation: wrongShake .45s ease-in-out;
+  outline: 4px solid rgba(239,68,68,.40);
+  box-shadow: 0 14px 28px rgba(239,68,68,.18);
+}
+@keyframes wrongShake{
+  0%,100%{ transform: translateX(0); }
+  20%{ transform: translateX(-10px); }
+  40%{ transform: translateX(10px); }
+  60%{ transform: translateX(-7px); }
+  80%{ transform: translateX(7px); }
+}
+.starBurst{
+  position: fixed;
+  left: 50%;
+  top: 18%;
+  transform: translateX(-50%);
+  font-size: 42px;
+  z-index: 9999;
+  pointer-events: none;
+  animation: starBurst .7s ease-out;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.22));
+}
+@keyframes starBurst{
+  0%{ opacity: 0; transform: translateX(-50%) translateY(12px) scale(.7); }
+  25%{ opacity: 1; }
+  100%{ opacity: 0; transform: translateX(-50%) translateY(-22px) scale(1.2); }
+}
+
+/* Selection/result common styles */
+.selSingle{
+  outline: 4px solid rgba(59,130,246,.45);
+  background: rgba(59,130,246,.08);
+  box-shadow: 0 14px 28px rgba(59,130,246,.18);
+}
+.answerOK{
+  outline: 4px solid rgba(34,197,94,.55) !important;
+  background: rgba(34,197,94,.10) !important;
+  box-shadow: 0 14px 30px rgba(34,197,94,.22) !important;
+}
+.answerBAD{
+  outline: 4px solid rgba(239,68,68,.55) !important;
+  background: rgba(239,68,68,.10) !important;
+  box-shadow: 0 14px 30px rgba(239,68,68,.22) !important;
+}
+.answerOK, .answerBAD{ animation: answerPulse .45s ease-out; }
+@keyframes answerPulse{
+  0%{ transform: scale(1); }
+  35%{ transform: scale(1.03); }
+  100%{ transform: scale(1); }
+}
+
+/* Pair helpers */
+.fxRel{ position: relative; }
+.fxBadge{
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 1000;
+  font-size: 13px;
+  background: #6366f1;
+  color: #fff;
+}
+.matchArmed{
+  outline: 4px dashed rgba(59,130,246,.55);
+  background: rgba(59,130,246,.06);
+}
+.matchPaired{
+  outline: 4px solid rgba(245,158,11,.40);
+  background: rgba(245,158,11,.08);
+}
+
+/* Center modal feedback */
+.fxOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: none;
+  place-items: center;
+  padding: 18px;
+  background: rgba(15,23,42,.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.fxOverlay.show{ display: grid; }
+.fxModal{
+  width: min(520px, 92vw);
+  border-radius: 22px;
+  border: 1px solid rgba(15,23,42,.12);
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 24px 60px rgba(15,23,42,.22);
+  padding: 18px 18px 16px;
+  display: grid;
+  gap: 10px;
+  transform: translateY(8px) scale(.98);
+  opacity: 0;
+  animation: fxIn .22s ease-out forwards;
+}
+@keyframes fxIn{ to{ transform: translateY(0) scale(1); opacity: 1; } }
+.fxIcon{
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 1000;
+  border: 1px solid rgba(15,23,42,.10);
+  box-shadow: 0 10px 18px rgba(15,23,42,.08);
+}
+.fxTitle{
+  margin: 0;
+  font-weight: 1000;
+  font-size: clamp(18px, .7vw + 16px, 22px);
+}
+.fxMsg{
+  margin: 0;
+  color: rgba(15,23,42,.68);
+  font-weight: 900;
+  line-height: 1.7;
+  font-size: var(--fs1);
+}
+.fxRow{ display: flex; align-items: center; gap: 12px; }
+.fxOK .fxIcon{
+  background: rgba(34,197,94,.12);
+  outline: 4px solid rgba(34,197,94,.18);
+}
+.fxBAD .fxIcon{
+  background: rgba(239,68,68,.12);
+  outline: 4px solid rgba(239,68,68,.18);
+}
+.fxModal.fxOut{ animation: fxOut .18s ease-in forwards; }
+@keyframes fxOut{ to{ transform: translateY(10px) scale(.98); opacity: 0; } }
+
+/* Popup overlay (CSS-only version) */
+.popOverlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  place-items:center;
+  background:rgba(15,23,42,.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index:9999;
+  padding:16px;
+}
+.popOverlay.show{ display:grid; }
+.popCard{
+  width:min(520px, 100%);
+  border-radius:22px;
+  border:1px solid rgba(15,23,42,.10);
+  background:rgba(255,255,255,.96);
+  box-shadow:0 22px 60px rgba(15,23,42,.22);
+  padding:18px 18px 16px;
+  transform: translateY(10px) scale(.98);
+  opacity:0;
+  transition: transform .22s ease, opacity .22s ease;
+}
+.popOverlay.show .popCard{ transform: translateY(0) scale(1); opacity:1; }
+.popTitle{
+  font-weight:1000;
+  font-size:clamp(18px, .6vw + 16px, 22px);
+  margin:0 0 6px;
+  line-height:1.2;
+  text-align:center;
+}
+.popMsg{
+  margin:0;
+  color:rgba(15,23,42,.70);
+  font-weight:900;
+  line-height:1.7;
+  text-align:center;
+  font-size:var(--fs1);
+}
+.popIcon{
+  width:56px;
+  height:56px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 10px;
+  font-size:30px;
+  font-weight:1000;
+  border:1px solid rgba(15,23,42,.10);
+}
+.popCard[data-kind="ok"]  .popIcon{ background: rgba(34,197,94,.12); }
+.popCard[data-kind="bad"] .popIcon{ background: rgba(239,68,68,.12); }
+
+/* Sticky footer */
+#footerControls{
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(15,23,42,.10);
+  padding: 10px;
+  margin-top: var(--gap);
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+}
+
+/* Classification items: never exceed column width */
+#clsItems .cardBtn{
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+#clsItems .cardLeft,
+#clsItems .clsTitleRow{
+  min-width: 0 !important;
+}
+
+/* =========================================================
+   MOBILE ONLY (<=520px)
+   ========================================================= */
+@media (max-width: 520px){
+
   :root{
     --ddColGap: clamp(8px, 3vw, 12px);
     --ddCardH:  clamp(60px, 10vh, 76px);
     --ddImg:    clamp(46px, 9vw, 64px);
+
+    --vvh: 100dvh;     /* JS overrides with px value */
+    --appPad: 0px;
+    --topBarH: 0px;    /* JS sets */
+    --stagePad: 10px;
+
+    --choiceMobileImgH: 110px;
+
+    /* default mobile list height budget */
+    --tallListMax: 60vh;
+
+    /* match row height on normal mobile */
+    --matchRowH: clamp(100px, 14vh, 140px);
   }
 
-  /* Choice: hard-fit helpers (only when stage--choice is set via JS) */
-  .stage--choice{
+  html, body{
+    height:100%;
+    overflow:hidden; /* prevent body scroll + blank folds */
+  }
+
+  /* APP fills viewport */
+  .appWrap{
+    padding: var(--appPad) !important;
+    height: var(--vvh) !important;
+    min-height: var(--vvh) !important;
+  }
+
+  .app{
+    max-width:none !important;
+    width:100% !important;
+    height: var(--vvh) !important;
+    min-height: var(--vvh) !important;
+    border-radius:0 !important;
+    overflow:hidden !important;
     display:flex !important;
     flex-direction:column !important;
-    overflow:hidden !important;
-    height:var(--stageH, auto) !important;
-    max-height:var(--stageH, auto) !important;
-  }
-  .stage--choice #choiceGrid{
-    flex:1 1 auto !important;
-    min-height:0 !important;
-    align-content:start;
-  }
-  .stage--choice #footerControls{
-    flex:0 0 auto !important;
-    margin-top:8px !important;
   }
 
-  #choiceGrid{
-    flex:1 1 auto !important;
+  /* Outer .stage wrapper (you have two stages) */
+  .appWrap > .stage{
+    display:flex !important;
+    flex-direction:column !important;
+    height:100% !important;
     min-height:0 !important;
-    align-content:start;
+    overflow:hidden !important;
+    padding:0 !important;
+    border-radius:0 !important;
   }
+
+  #topMeta{display:none !important;}
+
+  /* Stage: ONLY scroll container */
+  #stage{
+    flex: 1 1 auto !important;
+    min-height:0 !important;
+    height: calc(var(--vvh) - var(--topBarH)) !important;
+    max-height: calc(var(--vvh) - var(--topBarH)) !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    padding: var(--stagePad) !important;
+  }
+
+  /* Avoid forcing 100% height -> blank space */
+  #stage > .panelKid,
+  #stage > .twoColGrid,
+  #stage > .grid2_1{
+    min-height:0 !important;
+    height:auto !important;
+  }
+
+  .panelKid{min-width:0 !important;}
+  .panelFlex{
+    display:flex !important;
+    flex-direction:column !important;
+    min-height:0 !important;
+    height:auto !important;
+  }
+
+  /* Default: natural height panels */
+  .panelBodyGrow{
+    flex: 0 0 auto !important;
+    min-height:0 !important;
+    overflow:visible !important;
+  }
+
+  /* Two columns: allow inner scroll for lists */
+  .twoColGrid{
+    height:auto !important;
+    min-height:0 !important;
+    align-content:stretch !important;
+    gap: var(--ddColGap) !important;
+  }
+  .twoColGrid > .panelKid{
+    min-height:0 !important;
+    height:auto !important;
+  }
+  .twoColGrid .panelFlex{min-height:0 !important;}
+  .twoColGrid .panelBodyGrow{
+    flex: 1 1 auto !important;
+    min-height:0 !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  /* Footer: sticky without big gap */
+  #footerControls{
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 50 !important;
+    margin-top: 10px !important;
+    padding-bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    background: rgba(255,255,255,.96);
+  }
+  .footerControls .btnKid{flex:1 1 auto;}
+
+  /* Smaller icon buttons on mobile */
+  .choiceMetaDesktop .iconBtn,
+  #orderList .iconBtn{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+  }
+  .iconBtn i{font-size:18px;}
+
+  /* =========================
+     CHOICE (listen_choose + multiple_choice)
+     ========================= */
+  .choiceGrid{grid-template-columns:1fr !important;}
+  .choiceCard{padding:12px !important; gap:12px !important;}
+
   .choiceImgWrap{
     aspect-ratio:auto !important;
-    height:var(--choiceMobileImgH, 110px) !important;
+    height: var(--choiceMobileImgH) !important;
     min-height:0 !important;
   }
+  .choiceImg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain !important;
+    object-position:center;
+  }
 
-  /* Approved final behavior: overlay OFF, desktop row ON */
+  /* overlay OFF, desktop row ON */
   .choiceMetaMobile{display:none !important;}
   .choiceMetaDesktop{display:flex !important;}
 
@@ -877,381 +1135,581 @@ body{
     text-overflow:ellipsis;
   }
 
-  .choiceMetaDesktop .iconBtn{
-    width:34px;
-    height:34px;
-    border-radius:10px;
+  /* =========================
+     MATCH
+     ========================= */
+  .pairRow{gap:clamp(6px, 3vw, 10px) !important;}
+  .pairRow > .cardBtn{height: var(--matchRowH) !important;}
+  #pairGrid{
+    min-height:0 !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    max-height: var(--tallListMax);
   }
-  .iconBtn i{font-size:18px;}
 
-  /* Ordering width on mobile */
+  /* =========================
+     DRAG & DROP
+     ========================= */
+  #ddLeft, #ddRight{
+    min-height:0 !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    max-height: var(--tallListMax);
+  }
+  #ddLeft .cardBtn{height: var(--ddCardH) !important;}
+  #ddLeft .cardImg{
+    width:var(--ddImg) !important;
+    height:var(--ddImg) !important;
+    object-fit:contain !important;
+  }
+  #ddRight .dropZone{min-height: var(--ddCardH) !important;}
+  #ddRight .dropZone .cardImg{
+    width:var(--ddImg) !important;
+    height:var(--ddImg) !important;
+    object-fit:contain !important;
+  }
+
+  /* =========================
+     ORDERING
+     ========================= */
+  .orderIdx{
+    width:28px !important;
+    height:28px !important;
+    border-radius:10px !important;
+    font-size:12px !important;
+  }
+
+  #orderList{
+    min-height:0 !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    max-height: var(--tallListMax);
+    align-items: stretch !important;
+  }
   #orderList > .cardBtn{
     width:92% !important;
     max-width:92% !important;
     min-width:92% !important;
+    margin-inline:auto;
+    padding:12px 12px !important;
+  }
+  #orderList .cardImg{
+    width: clamp(54px, 12vw, 74px) !important;
+    height: clamp(54px, 12vw, 74px) !important;
+    object-fit: contain !important;
   }
 
-  /* MATCH spacing tighter */
-  .pairRow{gap:clamp(6px, 3vw, 10px);}
-}
+  #orderList .iconBtn{
+    width:28px !important;
+    height:28px !important;
+    border-radius:10px !important;
+    padding:0 !important;
+  }
+  #orderList .iconBtn i{font-size:16px !important;}
+  #orderList [data-orderid] .d-flex.gap-2.align-items-center{gap:6px !important;}
+  #orderList .cardLeft{gap:8px !important;}
+  #orderList .cardText{max-width:100% !important; -webkit-line-clamp:2 !important; white-space:normal !important;}
 
-/* ==============================
-   STICKY FOOTER (buttons always visible)
-   ============================== */
-#footerControls{
-  position: sticky;
-  bottom: 0;
-  z-index: 50;
-
-  background: rgba(255,255,255,.96);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
-  border-top: 1px solid rgba(15,23,42,.10);
-
-  padding: 10px;
-  margin-top: var(--gap);
-
-  padding-bottom: calc(10px + env(safe-area-inset-bottom));
-}
-
-/* ==============================
-   CLASSIFICATION (clean + consistent)
-   ============================== */
-
-/* Card sizing */
-#clsItems .cardBtn{
-  height: var(--clsCardH);
-  min-height: var(--clsCardH);
-  max-height: var(--clsCardH);
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-
-  padding:10px;
-
-  /* IMPORTANT: prevents "space-between" from stretching row */
-  justify-content:flex-start !important;
-}
-
-/* Category drop zones match height */
-#clsCats .dropZone{
-  min-height: var(--clsCardH);
-  height: auto;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
-}
-
-/* Image area inside classification card */
-#clsItems .cardImg{
-  width:100%;
-  height: calc(var(--clsCardH) - 52px); /* leaves room for title row */
-  object-fit:contain;
-  border-radius:18px;
-  margin-bottom:5px;
-}
-
-/* Title row: text + sound icon in ONE ROW */
-#clsItems .clsTitleRow{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:5px;              /* your requested spacing */
-  margin-top:-14px;
-  min-width:0;
-}
-
-/* Do NOT force full-width on text; keep it shrinkable */
-#clsItems .clsTitleRow .cardText{
-  margin:0 !important;
-  font-weight:1000;
-  font-size:var(--fs1);
-  text-align:center;
-
-  max-width:70%;
-  min-width:0;
-  flex:0 1 auto;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-/* Icon stays next to text */
-#clsItems .clsTitleRow .cardSide{
-  width:auto !important;
-  margin:0 !important;
-  flex:0 0 auto;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* General classification structure */
-#clsItems .cardLeft{
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-/* Small icon button for classification */
-#clsItems .iconBtn{
-  width:32px;
-  height:32px;
-  border-radius:10px;
-}
-#clsItems .iconBtn i{
-  font-size:18px;
-}
-
-/* Mobile: keep title row tight */
-@media (max-width:520px){
+  /* =========================
+     CLASSIFICATION
+     ========================= */
+  #clsItems, #clsCats{
+    min-height:0 !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    max-height: var(--tallListMax);
+  }
+  #clsItems .cardBtn{
+    min-height: clamp(100px, 13vh, 140px) !important;
+    height:auto !important;
+    padding:12px !important;
+  }
+  #clsItems .cardImg{
+    width:100% !important;
+    height: clamp(70px, 10vh, 100px) !important;
+    object-fit: contain !important;
+  }
   #clsItems .clsTitleRow{
     flex-wrap:nowrap !important;
     gap:2px !important;
   }
-  #clsItems .clsTitleRow .cardText{
-    max-width:70% !important;
-  }
-}
+  #clsItems .clsTitleRow .cardText{max-width:70% !important;}
 
-/* Desktop: prevent nested panel scroll issues if you want it visible */
-@media (min-width: 992px){
-  .twoColGrid .panelBodyGrow{
-    overflow: visible !important;
+  /* =========================
+     COLORING / TRACE (grid2_1 -> single col)
+     ========================= */
+  .grid2_1{
+    grid-template-columns:1fr !important;
+    height:auto !important;
+    min-height:0 !important;
   }
-}
+  .grid2_1 > .panelKid{
+    min-height:0 !important;
+    height:auto !important;
+    padding: 14px !important;
+  }
 
-/* Desktop: reduce classification height to avoid overflow */
-@media (min-width: 992px){
+  /* coloring & trace canvases: taller on mobile */
+  .paintCanvas,
+  .traceCanvas{
+    max-height: 52vh;
+  }
+
+  /* Coloring controls: label+value row, slider under (mobile clean) */
+  .paintSizeRow,
+  .paintOpacityRow{
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "label val"
+      "range range" !important;
+    gap: 8px !important;
+    align-items: center !important;
+    width:100%;
+    min-width:0;
+  }
+  .paintSizeLabel{ grid-area: label !important; }
+  .paintSizeVal{   grid-area: val !important; }
+  .paintSizeRange{ grid-area: range !important; width: 100% !important; min-width: 0 !important; margin: 0 !important; }
+
+  .paintOpacityLabel{ grid-area: label !important; }
+  .paintOpacityVal{   grid-area: val !important; }
+  .paintOpacityRange{ grid-area: range !important; width: 100% !important; min-width: 0 !important; margin: 0 !important; }
+
+  /* =========================
+     BUILD (construct)
+     ========================= */
+  #tiles{
+    max-height: 45vh;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  #buildWrap{padding: 14px !important;}
+  #buildWrap .pill{
+    font-size: clamp(16px, 2.2vw + 14px, 20px) !important;
+    padding: 12px 14px !important;
+  }
+  #buildWrap [data-tile]{
+    height: 52px !important;
+    min-width: 70px !important;
+    font-size: clamp(14px, 1.8vw + 12px, 18px) !important;
+  }
+
+  /* =========================================================
+     TALL MOBILE OVERRIDE (390×844 / 393×873 and similar)
+     - minimal duplication: mostly variables change
+     ========================================================= */
+/* =========================================================
+   MOBILE ONLY (360×800 base → tall phones 390×844 / 393×873)
+   ========================================================= */
+@media (max-width: 520px){
+
+  /* ---------------------------
+     BASE MOBILE VARIABLES
+     --------------------------- */
   :root{
-    --clsCardH: clamp(110px, 15vh, 150px);
-  }
-  #clsCats .dropZone{
-    min-height: var(--clsCardH) !important;
-  }
-  #clsItems .cardImg{
-    height: calc(var(--clsCardH) - 46px) !important;
-  }
-  /*  */
+    --vvh: 100dvh;   /* JS overrides with px */
+    --appPad: 0px;
+    --topBarH: 0px;  /* JS sets */
+    --stagePad: 10px;
 
+    /* Global “use space” budgets */
+    --listMax: 72vh;        /* was 60vh => too small */
+    --panelPad: 14px;
 
-}/* ==============================
-   COLORING — MOBILE + TABLET ONLY
-   Label + value + range in ONE ROW
-   ============================== */
-@media (max-width: 900px){
+    /* Choice cards */
+    --choiceCardGap: 12px;
+    --choiceCardPad: 14px;
+    --choiceMobileImgH: 150px; /* base mobile bigger */
 
-  .paintSizeRow{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    width:100%;
-    min-width:0;
-  }
+    /* Match */
+    --matchRowH: clamp(124px, 18vh, 170px);
 
-  /* keep pills compact so slider has space */
-  .paintSizeLabel,
-  .paintSizeVal{
-    flex:0 0 auto;
-    padding:4px 10px;
-    font-size:var(--fs0);
-    white-space:nowrap;
-  }
+    /* Drag & Drop */
+    --ddColGap: 12px;
+    --ddCardH: clamp(74px, 10vh, 98px);
+    --ddImg:   clamp(56px, 12vw, 78px);
 
-  /* slider takes remaining width */
-  .paintSizeRange{
-    flex:1 1 auto;
-    min-width:90px;     /* prevents collapsing too much */
-    margin:0 !important;/* override mt-2 if present elsewhere */
-  }.paintOpacityRow{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    width:100%;
-    min-width:0;
+    /* Ordering */
+    --orderRowH: clamp(78px, 10vh, 100px);
+    --orderImg:  clamp(60px, 13vw, 84px);
+
+    /* Classification */
+    --clsItemImgH: clamp(84px, 12vh, 120px);
+    --clsItemMinH: clamp(130px, 16vh, 180px);
+    --clsCatMinH:  clamp(120px, 15vh, 170px);
+
+    /* Coloring / Trace canvases */
+    --canvasMax: 64vh;
+    --toolsMin:  220px;
+
+    /* Build */
+    --buildSlotsPad: 14px;
+    --buildTileH: 56px;
+    --buildTileMinW: 76px;
   }
 
-  .paintOpacityLabel,
-  .paintOpacityVal{
-    flex:0 0 auto;
-    padding:4px 10px;
-    font-size:var(--fs0);
-    white-space:nowrap;
+  html, body{
+    height:100%;
+    overflow:hidden; /* prevent body scroll */
   }
 
-  .paintOpacityRange{
-    flex:1 1 auto;
-    min-width:90px;
-    margin:0 !important;
+  /* App fills viewport */
+  .appWrap{
+    padding: var(--appPad) !important;
+    height: var(--vvh) !important;
+    min-height: var(--vvh) !important;
   }
-}
-
-@media (min-width: 1280px){
-
-  /* Card becomes horizontal */
-  #clsItems .cardBtn{
-    flex-direction:row !important;
-    align-items:center !important;
-    gap:12px;
-  }
-
-  /* Left container becomes row */
-  #clsItems .cardLeft{
-    flex-direction:row !important;
-    align-items:center !important;
-    width:50%;
-    gap:32px;
-  }
-
-  /* Image takes remaining width */
-  #clsItems .cardImg{
-    flex:1 1 auto !important;
-    width:50% !important;
-    height:50% !important;
-    object-fit:contain;
-  }
-
-  /* Title + sound stay compact */
-  #clsItems .clsTitleRow{
-    flex:0 0 auto !important;
-    justify-content:flex-start !important;
-    margin-top:0 !important;
-    max-width:50%;
-     gap:30px;
-    
-  }
-
-  #clsItems .clsTitleRow .cardText{
-    max-width:100%;
-    text-align:right;
-  }
-}
-/* ==============================
-   MOBILE: make stage behave like a real viewport container
-   so inner panels can stretch (fix empty half screen)
-   ============================== */
-@media (max-width:520px){
-
-  /* Stage becomes a flex column container with fixed height var(--stageH) */
-  .stage{
+  .app{
+    max-width:none !important;
+    width:100% !important;
+    height: var(--vvh) !important;
+    min-height: var(--vvh) !important;
+    border-radius:0 !important;
+    overflow:hidden !important;
     display:flex !important;
     flex-direction:column !important;
-    height: var(--stageH, auto) !important;
-    max-height: var(--stageH, auto) !important;
-    overflow:hidden !important;   /* IMPORTANT: prevent outer scroll */
-    min-height:0 !important;
   }
 
-  /* Whatever you render at top level should stretch */
-  .stage > .panelKid,
-  .stage > .twoColGrid,
-  .stage > .grid2_1{
-    flex:1 1 auto !important;
-    min-height:0 !important;
-  }
-
-  /* If the top-level is a single flex panel, make it fill */
-  .stage > .panelKid.panelFlex{
+  /* Outer wrapper stage (you have two .stage elements) */
+  .appWrap > .stage{
+    display:flex !important;
+    flex-direction:column !important;
     height:100% !important;
     min-height:0 !important;
+    overflow:hidden !important;
+    padding:0 !important;
+    border-radius:0 !important;
   }
 
-  /* twoColGrid and grid2_1 must also take full height */
-  .twoColGrid,
-  .grid2_1{
-    height:100% !important;
+  #topMeta{ display:none !important; }
+
+  /* Main scroll container */
+  #stage{
+    flex: 1 1 auto !important;
     min-height:0 !important;
-  }
-
-  /* Ensure scrolling happens inside the intended “Grow” areas */
-  .panelBodyGrow{
+    height: calc(var(--vvh) - var(--topBarH)) !important;
+    max-height: calc(var(--vvh) - var(--topBarH)) !important;
     overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    padding: var(--stagePad) !important;
+  }
+
+  /* Prevent “blank space under short content” */
+  #stage > .panelKid,
+  #stage > .twoColGrid,
+  #stage > .grid2_1{
+    height:auto !important;
     min-height:0 !important;
+  }
+
+  .panelKid{
+    min-width:0 !important;
+    padding: var(--panelPad) !important;
+  }
+
+  /* Footer sticky (no gap) */
+  #footerControls{
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 50 !important;
+    margin-top: 10px !important;
+    padding-bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    background: rgba(255,255,255,.96);
+  }
+  .footerControls .btnKid{ flex:1 1 auto; }
+
+  /* Smaller icon buttons (but still tappable) */
+  .iconBtn{
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 12px !important;
+  }
+  .iconBtn i{ font-size:18px !important; }
+
+  /* =========================================================
+     CHOICE (multiple_choice + listen_choose)
+     - Card higher
+     - Image container higher
+     - Image responsive
+     ========================================================= */
+  .choiceGrid{ grid-template-columns:1fr !important; }
+
+  .choiceCard{
+    padding: var(--choiceCardPad) !important;
+    gap: var(--choiceCardGap) !important;
+  }
+
+  .choiceImgWrap{
+    aspect-ratio:auto !important;
+    height: var(--choiceMobileImgH) !important;
+    border-radius: 18px !important;
+    overflow:hidden !important;
+  }
+
+  .choiceImg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain !important;
+    object-position:center !important;
+  }
+
+  .choiceMetaMobile{ display:none !important; }
+  .choiceMetaDesktop{ display:flex !important; }
+  .choiceNameDesktop{
+    -webkit-line-clamp:2 !important;
+    white-space:normal !important;
+  }
+
+  /* =========================================================
+     MATCH
+     - Make boxes taller to consume unused space
+     ========================================================= */
+  .pairGrid{
+    padding-inline: 6px !important;
+  }
+  .pairRow{
+    gap: 10px !important;
+  }
+  .pairRow > .cardBtn{
+    height: var(--matchRowH) !important;
+  }
+
+  /* Instead of limiting to 60vh, allow it to use more */
+  #pairGrid{
+    max-height: var(--listMax) !important;
+    overflow:auto !important;
     -webkit-overflow-scrolling:touch;
   }
 
-  /* If a panel contains a list without panelBodyGrow, it should scroll */
-  #orderList,
-  #pairGrid,
-  #ddLeft,
-  #ddRight,
-  #clsItems,
-  #clsCats{
+  /* =========================================================
+     TWO COLUMN LAYOUTS (drag_drop + classification)
+     - Let lists grow taller (use free space)
+     ========================================================= */
+  .twoColGrid{
+    gap: var(--ddColGap) !important;
+    align-items: stretch !important;
+  }
+  .twoColGrid > .panelKid{
+    min-height: 0 !important;
+  }
+  .twoColGrid .panelFlex{
+    min-height: 0 !important;
+  }
+  .twoColGrid .panelBodyGrow{
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    max-height: var(--listMax) !important;
+  }
+
+  /* =========================================================
+     DRAG & DROP
+     - Taller cards + bigger image
+     ========================================================= */
+  #ddLeft .cardBtn{
+    height: var(--ddCardH) !important;
+    padding: 12px !important;
+  }
+  #ddLeft .cardImg{
+    width: var(--ddImg) !important;
+    height: var(--ddImg) !important;
+    object-fit:contain !important;
+  }
+
+  #ddRight .dropZone{
+    min-height: var(--ddCardH) !important;
+    padding: 12px !important;
+  }
+  #ddRight .dropZone .cardImg{
+    width: var(--ddImg) !important;
+    height: var(--ddImg) !important;
+    object-fit:contain !important;
+  }
+  #ddLeft, #ddRight{
+    max-height: var(--listMax) !important;
+  }
+
+  /* =========================================================
+     ORDERING
+     - Taller row + bigger image + keep responsive
+     ========================================================= */
+  #orderList{
+    max-height: var(--listMax) !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    align-items: stretch !important;
+  }
+  #orderList > .cardBtn{
+    width: 94% !important;
+    min-width: 94% !important;
+    max-width: 94% !important;
+    margin-inline:auto;
+    min-height: var(--orderRowH) !important;
+    padding: 12px !important;
+  }
+  #orderList .cardImg{
+    width: var(--orderImg) !important;
+    height: var(--orderImg) !important;
+    object-fit: contain !important;
+  }
+  .orderIdx{
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 12px !important;
+    font-size: 13px !important;
+  }
+
+  /* =========================================================
+     CLASSIFICATION
+     - Bigger item cards + bigger category zones
+     ========================================================= */
+  #clsItems, #clsCats{
+    max-height: var(--listMax) !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  #clsItems .cardBtn{
+    min-height: var(--clsItemMinH) !important;
+    height:auto !important;
+    padding: 12px !important;
+  }
+  #clsItems .cardImg{
+    width: 100% !important;
+    height: var(--clsItemImgH) !important;
+    object-fit: contain !important;
+  }
+
+  #clsCats .dropZone{
+    min-height: var(--clsCatMinH) !important;
+  }
+
+  /* =========================================================
+     COLORING + TRACE (grid2_1 -> single column)
+     - Taller canvas
+     - Taller tools panel
+     - Sliders UNDER text (not aligned in same row)
+     ========================================================= */
+  .grid2_1{
+    grid-template-columns:1fr !important;
     min-height:0 !important;
   }
-}
-/* Tablet: remove sticky footer to avoid empty space under buttons */
-@media (min-width: 601px) and (max-width: 900px){
-  #footerControls{
-    position: static !important;
-    bottom: auto !important;
-    padding-bottom: 10px !important; /* بدل safe-area */
-    margin-top: 10px !important;
-  }
-}
-/* Tablet: keep sticky but reduce bottom padding that creates the big gap */
-@media (min-width: 521px) and (max-width: 900px){
-  #footerControls{
-    padding-bottom: 10px !important; /* يلغي التضخيم من safe-area */
-    margin-top: 6px !important;
-  }
-}
-/* TABLET: ordering should not look like half screen */
-@media (min-width: 521px) and (max-width: 900px){
-  #orderList{
-    align-items: stretch !important;   /* stop centering the 70% cards */
+
+  .paintCanvas,
+  .traceCanvas{
+    max-height: var(--canvasMax) !important;
   }
 
-  #orderList > .cardBtn{
-    width: 92% !important;
-    min-width: 92% !important;
-    max-width: 92% !important;
-    margin-inline: auto;
+  /* Tools panel uses more height */
+  .grid2_1 > .panelKid:nth-child(2){
+    min-height: var(--toolsMin) !important;
   }
+
+  /* Sliders under the labels */
+  .paintSizeRow,
+  .paintOpacityRow{
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "label val"
+      "range range" !important;
+    gap: 10px !important;
+  }
+  .paintSizeLabel{ grid-area: label !important; }
+  .paintSizeVal{   grid-area: val !important; }
+  .paintSizeRange{ grid-area: range !important; width:100% !important; margin:0 !important; }
+
+  .paintOpacityLabel{ grid-area: label !important; }
+  .paintOpacityVal{   grid-area: val !important; }
+  .paintOpacityRange{ grid-area: range !important; width:100% !important; margin:0 !important; }
+
+  /* =========================================================
+     BUILD (construct)
+     - Use free space: bigger slots + bigger tiles + more height
+     ========================================================= */
+  #buildWrap{
+    padding: 14px !important;
+  }
+
+  #buildWrap .d-flex.gap-2.flex-wrap.justify-content-center.p-3{
+    padding: var(--buildSlotsPad) !important;
+  }
+
+  #buildWrap .pill{
+    font-size: clamp(16px, 2.4vw + 13px, 22px) !important;
+    padding: 12px 14px !important;
+    min-width: 64px !important;
+  }
+
+  #tiles{
+    max-height: 58vh !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  #buildWrap [data-tile]{
+    height: var(--buildTileH) !important;
+    min-width: var(--buildTileMinW) !important;
+    font-size: clamp(14px, 2vw + 12px, 18px) !important;
+    border-radius: 14px !important;
+  }
+
+  /* =========================================================
+     TALL PHONE BOOST (390×844 / 393×873)
+     - This is the key part you were missing
+     ========================================================= */
+  @media (max-width: 520px) and (min-height: 830px){
+    :root{
+      --listMax: 80vh;
+
+      --choiceMobileImgH: clamp(170px, 22vh, 230px);
+
+      --matchRowH: clamp(150px, 20vh, 200px);
+
+      --ddCardH: clamp(86px, 11vh, 110px);
+      --ddImg:   clamp(62px, 13vw, 86px);
+
+      --orderRowH: clamp(90px, 11vh, 120px);
+      --orderImg:  clamp(70px, 15vw, 96px);
+
+      --clsItemImgH: clamp(100px, 14vh, 140px);
+      --clsItemMinH: clamp(160px, 18vh, 220px);
+      --clsCatMinH:  clamp(150px, 17vh, 210px);
+
+      --canvasMax: 72vh;
+      --toolsMin:  260px;
+
+      --buildTileH: 60px;
+      --buildTileMinW: 86px;
+    }
+  }
+
 }
-/* TABLET: let stage behave like a full-height container so the panel/list can fill */
-@media (min-width: 521px) and (max-width: 900px){
-  #stage{
-    display: flex !important;
-    flex-direction: column !important;
-    min-height: 0 !important;
-  }
 
-  #stage > .panelKid.panelFlex{
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-  }
 
-  #orderList.panelBodyGrow{
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    overflow: auto !important;
-  }
 }
 
   </style>
 </head>
 
 <body>
+<body dir="rtl">
   <div class="appWrap">
-    <div class="app">
+    <div class="stage">
       <div class="topBar">
         <div class="qHead">
-        <button class="btnSound" id="btnSound" type="button" disabled>
-  <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
-</button>
+          <button class="btnSound" id="btnSound" type="button" disabled>
+            <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
+          </button>
 
           <div style="flex:1; min-width:0;">
             <h1 class="qTitle" id="qTitle">—</h1>
             <p class="qSub" id="qSub">—</p>
+
             <div class="topMeta" id="topMeta">
               <span class="pill" id="pillLesson">—</span>
               <span class="pill" id="pillProgress">0/0</span>
@@ -1261,26 +1719,37 @@ body{
         </div>
       </div>
 
+      <!-- This is your actual app mount point -->
       <div class="stage" id="stage">جاري التحميل...</div>
     </div>
   </div>
 
-  <div class="toastKid" id="toastKid" role="status" aria-live="polite">
-    <div>
-      <b id="toastTitle">—</b><br/>
-      <span id="toastMsg">—</span>
+  <!-- Center feedback popup -->
+  <div class="fxOverlay" id="fxOverlay" role="status" aria-live="polite" aria-atomic="true">
+    <div class="fxModal" id="fxModal">
+      <div class="fxRow">
+        <div class="fxIcon" id="fxIcon">—</div>
+        <div style="min-width:0">
+          <p class="fxTitle" id="fxTitle">—</p>
+          <p class="fxMsg" id="fxMsg">—</p>
+        </div>
+      </div>
     </div>
-    <button class="btnKid btnSecondary px-3" id="toastClose" type="button" style="height:44px">إغلاق</button>
   </div>
+
+</body>
+
 <script>
 /* =========================================================
   SETTINGS
 ========================================================= */
 const DATA_FILE = "sections-lessens.json"; // ensure this matches your real filename exactly
 const urlParams = new URL(location.href).searchParams;
+
 const levelId   = (urlParams.get("level")   || "preliminary").toLowerCase();
 const sectionId = (urlParams.get("section") || "").toLowerCase();
-const lessonId  = (urlParams.get("lesson")  || "");
+const lessonId  = (urlParams.get("lesson")  || "").toLowerCase(); // ✅ make lesson lowercase too
+
 
 const audio = new Audio();
 
@@ -1302,6 +1771,7 @@ function pickText(o){
 function visualSrc(o){
   return String(o?.imageUrl ?? "").trim() || "";
 }
+
 function setStageMode(mode){
   const st = document.getElementById("stage");
   if(!st) return;
@@ -1330,14 +1800,113 @@ function hintFor(type){
 }
 
 /* =========================================================
-  TOAST + FX + AUDIO
+  POPUP (Centered Auto-hide) + FX + AUDIO
 ========================================================= */
-function toast(titleHtml, msg){
-  $("#toastTitle").html(titleHtml);
-  $("#toastMsg").text(msg);
-  $("#toastKid").addClass("show");
+
+/* Inject popup DOM + CSS (so you don't need to edit HTML/CSS) */
+function ensurePopup(){
+  if(document.getElementById("popOverlay")) return;
+
+  const css = `
+  .popOverlay{
+    position:fixed; inset:0;
+    display:none; place-items:center;
+    background:rgba(15,23,42,.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index:9999;
+    padding:16px;
+  }
+  .popOverlay.show{ display:grid; }
+  .popCard{
+    width:min(520px, 100%);
+    border-radius:22px;
+    border:1px solid rgba(15,23,42,.10);
+    background:rgba(255,255,255,.96);
+    box-shadow:0 22px 60px rgba(15,23,42,.22);
+    padding:18px 18px 16px;
+    transform: translateY(10px) scale(.98);
+    opacity:0;
+    transition: transform .22s ease, opacity .22s ease;
+  }
+  .popOverlay.show .popCard{ transform: translateY(0) scale(1); opacity:1; }
+  .popTitle{
+    font-weight:1000;
+    font-size:clamp(18px, .6vw + 16px, 22px);
+    margin:0 0 6px;
+    line-height:1.2;
+    text-align:center;
+  }
+  .popMsg{
+    margin:0;
+    color:rgba(15,23,42,.70);
+    font-weight:900;
+    line-height:1.7;
+    text-align:center;
+    font-size:var(--fs1);
+  }
+  .popIcon{
+    width:56px; height:56px;
+    border-radius:18px;
+    display:grid; place-items:center;
+    margin:0 auto 10px;
+    font-size:30px;
+    font-weight:1000;
+    border:1px solid rgba(15,23,42,.10);
+  }
+  .popCard[data-kind="ok"]  .popIcon{ background: rgba(34,197,94,.12); }
+  .popCard[data-kind="bad"] .popIcon{ background: rgba(239,68,68,.12); }
+  `;
+
+  const st = document.createElement("style");
+  st.textContent = css;
+  document.head.appendChild(st);
+
+  const overlay = document.createElement("div");
+  overlay.className = "popOverlay";
+  overlay.id = "popOverlay";
+  overlay.setAttribute("aria-live","polite");
+  overlay.setAttribute("aria-atomic","true");
+  overlay.innerHTML = `
+    <div class="popCard" id="popCard" data-kind="ok" role="status">
+      <div class="popIcon" id="popIcon">✅</div>
+      <h3 class="popTitle" id="popTitle">—</h3>
+      <p class="popMsg" id="popMsg">—</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  // Optional: click outside to hide (doesn't block your UX)
+  overlay.addEventListener("pointerdown", (e)=>{
+    if(e.target === overlay) hidePopup();
+  });
 }
-function toastHide(){ $("#toastKid").removeClass("show"); }
+
+let popTimer = null;
+
+function showPopup({ kind="ok", title="—", msg="", ms=900 }){
+  ensurePopup();
+  clearTimeout(popTimer);
+
+  const $ov = $("#popOverlay");
+  const $card = $("#popCard");
+
+  $card.attr("data-kind", kind);
+  $("#popIcon").text(kind === "ok" ? "✅" : "❌");
+  $("#popTitle").text(title);
+  $("#popMsg").text(msg);
+
+  $ov.addClass("show");
+
+  popTimer = setTimeout(() => {
+    $ov.removeClass("show");
+  }, ms);
+}
+
+function hidePopup(){
+  clearTimeout(popTimer);
+  $("#popOverlay").removeClass("show");
+}
 
 function burstStars(){
   const d = document.createElement("div");
@@ -1359,19 +1928,39 @@ function animWrong($el){
 }
 
 function playSound(url){
-  if(!url){ toast("تنبيه","لا يوجد ملف صوت"); return; }
+  if(!url){
+    showPopup({kind:"bad", title:"تنبيه", msg:"لا يوجد ملف صوت", ms:900});
+    return;
+  }
   audio.pause();
   audio.src = url;
   audio.currentTime = 0;
-  audio.play().catch(()=>toast("تنبيه","تعذر تشغيل الصوت"));
+  audio.play().catch(()=>showPopup({kind:"bad", title:"تنبيه", msg:"تعذر تشغيل الصوت", ms:900}));
 }
 
+/* Unified feedback: centered popup + auto-hide (no close button) */
 function feedback(ok, msg, $target){
-  toast(ok ? "صحيح ✅" : "جرّب مرة أخرى 🔄", msg);
   const fb = state.lesson?.interactive?.feedbackAudio || {};
   const snd = ok ? fb.correct : fb.wrong;
   if(snd) playSound(snd);
+
   ok ? animCorrect($target) : animWrong($target);
+
+  if(ok){
+    showPopup({
+      kind: "ok",
+      title: "صحيح",
+      msg: msg || "إجابة صحيحة",
+      ms: 850
+    });
+  }else{
+    showPopup({
+      kind: "bad",
+      title: "خطأ",
+      msg: (msg || "جرّب مرة أخرى") + " — من فضلك حاول مرة أخرى",
+      ms: 900
+    });
+  }
 }
 
 /* =========================================================
@@ -1405,7 +1994,9 @@ function wireFooter(){
   $("#btnCheck").off("click").on("click", ()=>validate());
   $("#btnTry").off("click").on("click", ()=>{ resetQ(); render(); });
   $("#btnBack").off("click").on("click", ()=>history.back());
-  $("#toastClose").off("click").on("click", toastHide);
+
+  // If your old toast close button still exists, we neutralize it:
+  $("#toastClose").off("click").on("click", ()=>{ /* no-op */ });
 }
 
 /* =========================================================
@@ -1418,7 +2009,6 @@ function canvasPos(canvas, clientX, clientY){
   return {x, y};
 }
 
-/* reusable stroke-style applier (reduces duplicated code) */
 function applyStrokeStyle(ctx, st){
   ctx.globalAlpha = st.opacity ?? 1;
   ctx.lineCap = "round";
@@ -1428,9 +2018,7 @@ function applyStrokeStyle(ctx, st){
   ctx.globalCompositeOperation = st.composite ?? "source-over";
 }
 
-/* =========================================================
-  NEW: HARD CLIP DRAWING TO MASK (prevents painting outside)
-========================================================= */
+/* HARD CLIP DRAWING TO MASK (prevents painting outside) */
 function applyMaskToDrawing(drawCtx, maskCtx){
   const w = drawCtx.canvas.width, h = drawCtx.canvas.height;
   const drawImg = drawCtx.getImageData(0,0,w,h);
@@ -1442,22 +2030,17 @@ function applyMaskToDrawing(drawCtx, maskCtx){
   for(let i=0; i<m.length; i+=4){
     const maskA = m[i+3];
     if(maskA <= 20){
-      d[i+3] = 0; // erase drawing outside allowed region
+      d[i+3] = 0;
     }
   }
   drawCtx.putImageData(drawImg,0,0);
 }
 
-/* Updated pointer draw installer:
-   - avoids duplicate touch+pointer drawing
-   - now supports onDraw and onEnd hooks */
 function installPointerDraw({ canvas, ctx, getStrokeStyle, onStrokeStart, onDraw, onEnd }){
   let drawing = false;
   let last = null;
 
-  function getPoint(e){
-    return canvasPos(canvas, e.clientX, e.clientY);
-  }
+  function getPoint(e){ return canvasPos(canvas, e.clientX, e.clientY); }
 
   function start(e){
     e.preventDefault();
@@ -1510,7 +2093,7 @@ function installPointerDraw({ canvas, ctx, getStrokeStyle, onStrokeStart, onDraw
   window.addEventListener("pointercancel", end, {passive:false});
 }
 
-/* Optional layout helper (kept) */
+/* Layout helpers */
 function fitChoiceCardsHard(){
   if(!matchMedia("(max-width: 520px)").matches) return;
 
@@ -1520,11 +2103,9 @@ function fitChoiceCardsHard(){
   if(!stage || !stage.classList.contains("stage--choice")) return;
 
   const footer = document.getElementById("footerControls");
-
   if(!app || !topBar || !stage) return;
 
   const vh = window.visualViewport?.height || window.innerHeight;
-
   const appRect = app.getBoundingClientRect();
   const topRect = topBar.getBoundingClientRect();
 
@@ -1536,17 +2117,14 @@ function fitChoiceCardsHard(){
   if(!grid) return;
 
   const footerH = footer ? footer.getBoundingClientRect().height : 0;
-
   const stageStyle = getComputedStyle(stage);
   const stagePadY = (parseFloat(stageStyle.paddingTop) || 0) + (parseFloat(stageStyle.paddingBottom) || 0);
-
   const gridArea = stageH - stagePadY - footerH - 10;
 
   const cards = [...grid.querySelectorAll(".choiceCard")];
   if(!cards.length) return;
 
   const gap = parseFloat(getComputedStyle(grid).rowGap) || 10;
-
   const fixedPerCard = 78;
   const totalFixed = (fixedPerCard * cards.length) + (gap * (cards.length - 1));
   const imgH = Math.floor((gridArea - totalFixed) / cards.length);
@@ -1564,13 +2142,11 @@ function fitStageToViewport(){
   if(!app || !topBar || !stage) return;
 
   const vh = window.visualViewport?.height || window.innerHeight;
-
   const appRect = app.getBoundingClientRect();
   const topRect = topBar.getBoundingClientRect();
 
   const availableStage = vh - topRect.height - appRect.top;
   const stageH = Math.max(availableStage, 240);
-
   document.documentElement.style.setProperty("--stageH", stageH + "px");
 }
 
@@ -1613,11 +2189,11 @@ function loadImg(url){
     img.onerror = ()=>reject(new Error("image load failed: " + url));
     img.src = url;
   });
-}/* =========================================================
+}
+
+/* =========================================================
   RANDOMIZATION (SAFE — ID BASED)
 ========================================================= */
-
-// Fisher–Yates shuffle (returns NEW array)
 function shuffleArr(arr){
   const a = Array.isArray(arr) ? arr.slice() : [];
   for(let i = a.length - 1; i > 0; i--){
@@ -1626,60 +2202,43 @@ function shuffleArr(arr){
   }
   return a;
 }
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
 
-// Deep clone (plain JSON)
-function deepClone(o){
-  return JSON.parse(JSON.stringify(o));
-}
-
-// Randomize ONE question safely
 function randomizeQuestion(q){
   const Q = deepClone(q);
-
   switch(Q.type){
-
     case "multiple_choice":
     case "listen_choose":
       Q.choices = shuffleArr(Q.choices);
       break;
-
     case "match":
       Q.left  = shuffleArr(Q.left);
       Q.right = shuffleArr(Q.right);
       break;
-
     case "drag_drop":
       Q.draggable = shuffleArr(Q.draggable || Q.draggables);
       Q.targets   = shuffleArr(Q.targets || Q.dropZones);
       break;
-
     case "ordering":
       Q.tiles = shuffleArr(Q.tiles || Q.items);
       break;
-
     case "classification":
       Q.items      = shuffleArr(Q.items);
       Q.categories = shuffleArr(Q.categories);
       break;
-
     case "build_construct":
       Q.tiles = shuffleArr(Q.tiles);
       break;
   }
-
   return Q;
 }
 
-// Randomize entire lesson interactive block
 function randomizeInteractive(interactive){
   if(!interactive) return interactive;
-
   const out = deepClone(interactive);
 
-  // shuffle questions themselves
   out.questionBank = shuffleArr(out.questionBank).map(randomizeQuestion);
 
-  // shuffle flow per item (keeps coverage)
   const newFlow = {};
   for(const [itemId, qIds] of Object.entries(out.flowByItem || {})){
     newFlow[itemId] = shuffleArr(qIds);
@@ -1697,6 +2256,7 @@ function drawContain(ctx, img, pad=18){
   const x = (cw - w)/2, y = (ch - h)/2;
   ctx.drawImage(img, x, y, w, h);
 }
+
 async function drawSvgToCanvas(ctx, svgUrl, cw, ch){
   const res = await fetch(svgUrl, {cache:"no-store"});
   if(!res.ok) throw new Error("SVG fetch failed");
@@ -1743,7 +2303,8 @@ const state = {
   dragId:"",
   selectedForTap:null,
   paint:null,
-  trace:null
+  trace:null,
+  validated:false
 };
 
 function findBy(arr, key, val){
@@ -1753,33 +2314,33 @@ function findBy(arr, key, val){
 function findLesson(level, section, lesson){
   const sec = findBy(level?.sections, "sectionId", section);
   if(!sec) return {sec:null, les:null};
+
   const les = (Array.isArray(sec.lessons)?sec.lessons:[])
-    .find(L => String(L.lessonId||"") === String(lesson)) || null;
+    .find(L => String(L.lessonId||"").toLowerCase() === String(lesson||"").toLowerCase()) || null;
+
   return {sec, les};
 }
-function buildFlow(lesson){
-  const inter = lesson?.interactive || {};
-  const byItem = inter.flowByItem || {};
-  const bank = Array.isArray(inter.questionBank) ? inter.questionBank : [];
-  const byId = new Map(bank.map(q => [q.id, q]));
-  const out = [];
 
-  Object.entries(byItem).forEach(([itemId, ids]) => {
-    const seen = new Set();
-    (ids||[]).forEach(qId => {
-      if(seen.has(qId)) return;
-      seen.add(qId);
-      const qObj = byId.get(qId);
-      if(qObj) out.push({itemId, qId, q: qObj});
-    });
-  });
-  return out;
+
+function buildFlowAllQuestions(lesson){
+  const bank = Array.isArray(lesson?.interactive?.questionBank)
+    ? lesson.interactive.questionBank
+    : [];
+
+  // Each entry matches what your render/resolveQuestion expects: { itemId, qId, q }
+  return bank.map(q => ({
+    itemId: q.itemId ?? q.forItemId ?? "", // optional; safe if your questions include item binding
+    qId: q.id,
+    q
+  }));
 }
+
 
 /* ===== Per-item question resolving ===== */
 function getItemById(itemId){
   return (state.lesson?.items || []).find(it => String(it.itemId) === String(itemId)) || null;
 }
+
 function resolveQuestion(entry){
   const q = entry?.q || {};
   const item = getItemById(entry.itemId);
@@ -1836,11 +2397,14 @@ function resetQ(){
   state.selectedForTap = null;
   state.paint = null;
   state.trace = null;
+  state.validated = false;
 }
+
 function curEntry(){ return state.flow[state.idx]; }
 function progressText(){ return `${Math.min(state.idx+1, state.flow.length)}/${state.flow.length}`; }
 
 function nextQ(){
+  hidePopup();
   if(state.idx < state.flow.length - 1){
     state.idx++; resetQ(); render();
     return;
@@ -1884,7 +2448,6 @@ function soundIconBtn(audioUrl){
        </button>`;
 }
 
-/* for list cards: ONLY if visible text exists */
 function inlineAudioBtn(obj){
   if(!hasVisibleText(obj)) return "";
   const aud = String(obj?.audioUrl || "").trim();
@@ -1934,10 +2497,13 @@ function renderChoice(entry){
         const showMic = hasVisibleText(c) && String(c.audioUrl||"").trim().length>0;
         const micBtn = showMic ? soundIconBtn(c.audioUrl) : "";
 
+        const isSel = (state.q.selected === id);
+
         return `
-          <div class="cardBtn choiceCard" role="button" tabindex="0"
-            data-choice="${esc(id)}"
-            data-selected="${state.q.selected===id ? "1":"0"}">
+          <div class="cardBtn choiceCard ${isSel ? "selSingle" : ""} ${state.validated ? "pe-none" : ""}"
+               role="button" tabindex="0"
+               data-choice="${esc(id)}"
+               data-selected="${isSel ? "1":"0"}">
 
             <div class="choiceImgWrap">
               ${ img
@@ -1969,6 +2535,7 @@ function renderChoice(entry){
 
   $stage()
     .off("click.choice").on("click.choice", "[data-choice]", function(e){
+      if(state.validated) return;
       if($(e.target).is("[data-choice-audio]")) return;
       state.q.selected = $(this).attr("data-choice");
       render();
@@ -1981,13 +2548,13 @@ function renderChoice(entry){
   wireFooter();
 }
 
-/* MATCH */
+/* MATCH (pairs) — persistent link visuals */
 function renderMatch(entry){
   const q = entry.q;
   const left  = Array.isArray(q.left)?q.left:[];
   const right = Array.isArray(q.right)?q.right:[];
-  state.q.leftPick ??= null;
-  state.q.pairs ??= {};
+  state.q.leftPick ??= null;     // armed left
+  state.q.pairs ??= {};          // leftId -> rightId
 
   setTop({
     title: q?.prompt?.text || "طابق",
@@ -2000,14 +2567,24 @@ function renderMatch(entry){
 
   const rows = Math.max(left.length, right.length);
 
+  // RightId -> pairNumber (based on left order)
+  const rightBadge = {};
+  left.forEach((l, idx) => {
+    const rid = state.q.pairs?.[String(l.id)];
+    if(rid) rightBadge[String(rid)] = idx + 1;
+  });
+
+  // Helper: is right used?
+  const usedRightSet = new Set(Object.values(state.q.pairs || {}).map(String));
+
   $stage().html(`
     <div class="panelKid panelFlex">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-        <p class="panelTitle m-0">المطابقة <small>اليسار مع اليمين (صف بصف)</small></p>
+        <p class="panelTitle m-0">المطابقة <small>اختر يسار ثم يمين</small></p>
 
         <div class="d-flex align-items-center gap-2">
-          <button class="btnKid btnSecondary px-3" id="matchClear" type="button">مسح</button>
-          <span class="pill">اختر يسار ثم يمين</span>
+          <button class="btnKid btnSecondary px-3" id="matchClear" type="button" ${state.validated ? "disabled" : ""}>مسح</button>
+          <span class="pill">التحديد يبقى حتى (تحقق)</span>
         </div>
       </div>
 
@@ -2017,32 +2594,53 @@ function renderMatch(entry){
           const r = right[i] || null;
 
           const lHtml = l ? (() => {
+            const lId = String(l.id);
+            const pairedRid = state.q.pairs?.[lId] ? String(state.q.pairs[lId]) : "";
+            const isArmed  = state.q.leftPick === lId;
+            const isPaired = Boolean(pairedRid);
+
             const img = visualSrc(l);
             const txt = pickText(l);
             const audioHtml = inlineAudioBtn(l);
+
             return `
-              <div class="cardBtn" role="button" tabindex="0"
-                   data-left="${esc(l.id)}"
-                   data-selected="${state.q.leftPick===l.id ? "1":"0"}">
+              <div class="cardBtn fxRel ${isArmed ? "matchArmed" : ""} ${isPaired ? "matchPaired" : ""} ${state.validated ? "pe-none" : ""}"
+                   role="button" tabindex="0"
+                   data-left="${esc(lId)}">
+
+                ${isPaired ? `<div class="fxBadge" title="زوج رقم ${i+1}">${i+1}</div>` : ``}
+
                 <div class="cardLeft">
                   ${img
                     ? `<img class="matchLeftImg" src="${esc(img)}" alt=""/>`
                     : `<div class="cardText">${esc(txt || "—")}</div>`
                   }
                 </div>
+
                 ${audioHtml ? `<div class="cardSide">${audioHtml}</div>` : ``}
               </div>
             `;
           })() : `<div></div>`;
 
           const rHtml = r ? (() => {
+            const rId = String(r.id);
+            const isUsed = usedRightSet.has(rId);
+            const badgeNo = rightBadge[rId] || "";
+
             const txt = pickText(r);
             const audioHtml = inlineAudioBtn(r);
+
             return `
-              <div class="cardBtn" role="button" tabindex="0" data-right="${esc(r.id)}">
+              <div class="cardBtn fxRel ${isUsed ? "matchPaired" : ""} ${state.validated ? "pe-none" : ""}"
+                   role="button" tabindex="0"
+                   data-right="${esc(rId)}">
+
+                ${badgeNo ? `<div class="fxBadge" title="مرتبط بزوج رقم ${badgeNo}">${badgeNo}</div>` : ``}
+
                 <div class="cardLeft">
                   <div class="cardText">${esc(txt || "—")}</div>
                 </div>
+
                 ${audioHtml ? `<div class="cardSide">${audioHtml}</div>` : ``}
               </div>
             `;
@@ -2062,20 +2660,39 @@ function renderMatch(entry){
       playSound($(this).attr("data-audio"));
     })
     .off("click.matchL").on("click.matchL", "[data-left]", function(){
-      state.q.leftPick = $(this).attr("data-left");
+      if(state.validated) return;
+      const lid = $(this).attr("data-left");
+      state.q.leftPick = (state.q.leftPick === lid) ? null : lid;
       render();
     })
     .off("click.matchR").on("click.matchR", "[data-right]", function(){
+      if(state.validated) return;
       const rid = $(this).attr("data-right");
       const lid = state.q.leftPick;
-      if(!lid){ toast("تنبيه","اختر عنصرًا من اليسار أولًا"); return; }
+
+      if(!lid){
+        feedback(false, "اختر عنصرًا من اليسار أولًا", $stage());
+        return;
+      }
+
       state.q.pairs = state.q.pairs || {};
-      state.q.pairs[lid] = rid;
+
+      // enforce unique right: if another left used this right, remove it
+      for(const [L, R] of Object.entries(state.q.pairs)){
+        if(String(R) === String(rid) && String(L) !== String(lid)){
+          delete state.q.pairs[L];
+        }
+      }
+
+      state.q.pairs[String(lid)] = String(rid);
       state.q.leftPick = null;
       render();
     })
     .off("click.matchClear").on("click.matchClear", "#matchClear", function(){
-      state.q.leftPick=null; state.q.pairs={}; render();
+      if(state.validated) return;
+      state.q.leftPick = null;
+      state.q.pairs = {};
+      render();
     });
 
   wireFooter();
@@ -2102,8 +2719,11 @@ function renderDragDrop(entry){
     const txt = pickText(d);
     const audioHtml = inlineAudioBtn(d);
 
+    const isPicked = isTouch() && String(state.selectedForTap) === String(d.id);
+
     return `
-      <div class="cardBtn dragItem" role="button" tabindex="0"
+      <div class="cardBtn dragItem ${isPicked ? "selSingle" : ""} ${state.validated ? "pe-none" : ""}"
+           role="button" tabindex="0"
         ${isTouch() ? "" : `draggable="true"`}
         data-dragid="${esc(d.id)}"
         style="${used ? "opacity:.55" : ""}">
@@ -2126,7 +2746,7 @@ function renderDragDrop(entry){
     const label = String(z.label ?? pickText(z) ?? "").trim();
 
     return `
-      <div class="dropZone" data-dropid="${esc(tid)}" data-active="0">
+      <div class="dropZone ${state.validated ? "pe-none" : ""}" data-dropid="${esc(tid)}" data-active="0">
         <div class="d-flex align-items-center gap-2 min-w-0" style="min-width:0">
           ${img ? `<img class="cardImg" src="${esc(img)}" alt=""/>` : ``}
           <div style="font-weight:1000; font-size:var(--fs1); overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
@@ -2150,7 +2770,7 @@ function renderDragDrop(entry){
         <p class="panelTitle">الأهداف <small>${isTouch() ? "اضغط الهدف لوضع المختار" : "إفلات"}</small></p>
         <div class="vList panelBodyGrow" id="ddRight">${rightHtml}</div>
         <div class="d-flex gap-2 flex-wrap mt-3">
-          <button class="btnKid btnSecondary px-3" id="ddClear" type="button">مسح</button>
+          <button class="btnKid btnSecondary px-3" id="ddClear" type="button" ${state.validated ? "disabled" : ""}>مسح</button>
         </div>
       </div>
     </div>
@@ -2171,6 +2791,7 @@ function renderDragDrop(entry){
       playSound($(this).attr("data-audio"));
     })
     .off("drop.dd").on("drop.dd", "[data-dropid]", function(e){
+      if(state.validated) return;
       e.preventDefault();
       $(this).attr("data-active","0");
 
@@ -2183,21 +2804,24 @@ function renderDragDrop(entry){
       render();
     })
     .off("click.ddtapDrag").on("click.ddtapDrag", "#ddLeft [data-dragid]", function(e){
+      if(state.validated) return;
       if($(e.target).closest("[data-audio]").length) return;
       if(!isTouch()) return;
       state.selectedForTap = $(this).attr("data-dragid");
       render();
     })
     .off("click.ddtapDrop").on("click.ddtapDrop", "#ddRight [data-dropid]", function(){
+      if(state.validated) return;
       if(!isTouch()) return;
       const targetId = $(this).attr("data-dropid");
-      if(!state.selectedForTap){ toast("تنبيه","اختر عنصرًا أولًا"); return; }
+      if(!state.selectedForTap){ feedback(false, "اختر عنصرًا أولًا", $stage()); return; }
       state.q.assign = state.q.assign || {};
       state.q.assign[targetId] = String(state.selectedForTap);
       state.selectedForTap = null;
       render();
     })
     .off("click.ddClear").on("click.ddClear", "#ddClear", function(){
+      if(state.validated) return;
       state.q.assign = {}; state.selectedForTap=null; render();
     });
 
@@ -2229,7 +2853,7 @@ function renderOrdering(entry){
     const audioHtml = inlineAudioBtn(it);
 
     return `
-      <div class="cardBtn ${isTouch() ? "" : "dragItem"}"
+      <div class="cardBtn ${isTouch() ? "" : "dragItem"} ${state.validated ? "pe-none" : ""}"
            ${isTouch() ? "" : `draggable="true"`}
            data-orderid="${esc(id)}" data-index="${idx}">
         <div class="cardLeft">
@@ -2242,8 +2866,8 @@ function renderOrdering(entry){
           ${audioHtml ? `<div class="cardSide">${audioHtml}</div>` : ``}
 
           ${isTouch() ? `
-            <button class="iconBtn" type="button" data-move="up" ${idx===0?"disabled":""}>⬆️</button>
-            <button class="iconBtn" type="button" data-move="down" ${idx===state.q.order.length-1?"disabled":""}>⬇️</button>
+            <button class="iconBtn" type="button" data-move="up" ${idx===0 || state.validated ? "disabled":""}>⬆️</button>
+            <button class="iconBtn" type="button" data-move="down" ${idx===state.q.order.length-1 || state.validated ? "disabled":""}>⬇️</button>
           ` : `<span class="pill">↕️</span>`}
         </div>
       </div>
@@ -2265,6 +2889,7 @@ function renderOrdering(entry){
       playSound($(this).attr("data-audio"));
     })
     .off("click.orderMove").on("click.orderMove", "[data-move]", function(e){
+      if(state.validated) return;
       e.stopPropagation();
       const dir = $(this).attr("data-move");
       const $row = $(this).closest("[data-orderid]");
@@ -2277,6 +2902,7 @@ function renderOrdering(entry){
       render();
     })
     .off("drop.order").on("drop.order", "[data-orderid]", function(e){
+      if(state.validated) return;
       e.preventDefault();
       if(isTouch()) return;
 
@@ -2317,8 +2943,12 @@ function renderClassification(entry){
     const img = visualSrc(it);
     const txt = pickText(it);
     const audioHtml = inlineAudioBtn(it);
+
+    const isPicked = isTouch() && String(state.selectedForTap) === String(it.id);
+
     return `
-      <div class="cardBtn dragItem" role="button" tabindex="0"
+      <div class="cardBtn dragItem ${isPicked ? "selSingle" : ""} ${state.validated ? "pe-none" : ""}"
+           role="button" tabindex="0"
         ${isTouch() ? "" : `draggable="true"`}
         data-dragid="${esc(it.id)}"
         style="${used ? "opacity:.55" : ""}">
@@ -2342,7 +2972,7 @@ function renderClassification(entry){
       .filter(x => x.text);
 
     return `
-      <div class="dropZone" data-dropid="${esc(c.id)}" data-active="0"
+      <div class="dropZone ${state.validated ? "pe-none" : ""}" data-dropid="${esc(c.id)}" data-active="0"
            style="flex-direction:column; align-items:stretch;">
         <div class="d-flex align-items-center justify-content-between gap-2">
           <div style="font-weight:1000; font-size:var(--fs1);">${esc(label || "فئة")}</div>
@@ -2357,6 +2987,7 @@ function renderClassification(entry){
                     <span>${esc(a.text)}</span>
                     <button type="button" class="clsX"
                             title="حذف" aria-label="حذف"
+                            ${state.validated ? "disabled" : ""}
                             data-unassign="${esc(a.id)}">×</button>
                   </span>
                 `).join("")
@@ -2395,6 +3026,7 @@ function renderClassification(entry){
       playSound($(this).attr("data-audio"));
     })
     .off("drop.cls").on("drop.cls", "#clsCats [data-dropid]", function(e){
+      if(state.validated) return;
       e.preventDefault();
       $(this).attr("data-active","0");
       const catId = $(this).attr("data-dropid");
@@ -2405,22 +3037,25 @@ function renderClassification(entry){
       render();
     })
     .off("click.clsPick").on("click.clsPick", "#clsItems [data-dragid]", function(e){
+      if(state.validated) return;
       if($(e.target).closest("[data-audio]").length) return;
       if(!isTouch()) return;
       state.selectedForTap = $(this).attr("data-dragid");
       render();
     })
     .off("click.clsCat").on("click.clsCat", "#clsCats [data-dropid]", function(e){
+      if(state.validated) return;
       if(!isTouch()) return;
       if($(e.target).closest("[data-unassign]").length) return;
       const catId = $(this).attr("data-dropid");
-      if(!state.selectedForTap){ toast("تنبيه","اختر عنصرًا أولًا"); return; }
+      if(!state.selectedForTap){ feedback(false, "اختر عنصرًا أولًا", $stage()); return; }
       state.q.catAssign = state.q.catAssign || {};
       state.q.catAssign[String(state.selectedForTap)] = String(catId);
       state.selectedForTap = null;
       render();
     })
     .off("click.clsRemove").on("click.clsRemove", "[data-unassign]", function(e){
+      if(state.validated) return;
       e.stopPropagation();
       const itemId = $(this).attr("data-unassign");
       if(!itemId) return;
@@ -2468,14 +3103,14 @@ function renderBuild(entry){
       </div>
 
       <div class="d-flex gap-2 flex-wrap justify-content-center mt-3">
-        <button class="btnKid btnSecondary px-3" id="buildBack" type="button">حذف</button>
-        <button class="btnKid btnSecondary px-3" id="buildClear" type="button">مسح</button>
+        <button class="btnKid btnSecondary px-3" id="buildBack" type="button" ${state.validated ? "disabled" : ""}>حذف</button>
+        <button class="btnKid btnSecondary px-3" id="buildClear" type="button" ${state.validated ? "disabled" : ""}>مسح</button>
         <span class="pill">الناتج: <b>${esc(builtText||"—")}</b></span>
       </div>
 
       <div class="d-flex gap-2 flex-wrap justify-content-center mt-3" id="tiles">
         ${tiles.map(t => `
-          <button class="btnKid btnSecondary" style="height:48px; min-width:64px;" type="button" data-tile="${esc(t.id)}">
+          <button class="btnKid btnSecondary ${state.validated ? "pe-none" : ""}" style="height:48px; min-width:64px;" type="button" data-tile="${esc(t.id)}">
             ${esc(pickText(t) || t.id)}
           </button>
         `).join("")}
@@ -2491,16 +3126,19 @@ function renderBuild(entry){
 
   $stage()
     .off("click.tile").on("click.tile", "[data-tile]", function(){
+      if(state.validated) return;
       state.q.built = state.q.built || [];
       state.q.built.push($(this).attr("data-tile"));
       render();
     })
     .off("click.buildBack").on("click.buildBack", "#buildBack", function(){
+      if(state.validated) return;
       state.q.built = state.q.built || [];
       state.q.built.pop();
       render();
     })
     .off("click.buildClear").on("click.buildClear", "#buildClear", function(){
+      if(state.validated) return;
       state.q.built = [];
       render();
     });
@@ -2568,7 +3206,8 @@ async function renderColoring(entry){
               min="6"
               max="52"
               step="1"
-              value="${brushSizeDefault}">
+              value="${brushSizeDefault}"
+              ${state.validated ? "disabled" : ""}>
           </div>
 
           <div class="mt-3">
@@ -2582,14 +3221,15 @@ async function renderColoring(entry){
                 min="0.2"
                 max="1"
                 step="0.05"
-                value="${brushOpacityDefault}">
+                value="${brushOpacityDefault}"
+                ${state.validated ? "disabled" : ""}>
             </div>
           </div>
 
           <div class="d-flex gap-2 flex-wrap mt-3">
-            <button class="btnKid btnSecondary px-3" id="paintUndo" type="button">تراجع</button>
-            <button class="btnKid btnSecondary px-3" id="paintClear" type="button">مسح</button>
-            <button class="btnKid btnSecondary px-3" id="paintHint" type="button" ${hintUrl ? "" : "disabled"}>تلميح</button>
+            <button class="btnKid btnSecondary px-3" id="paintUndo" type="button" ${state.validated ? "disabled" : ""}>تراجع</button>
+            <button class="btnKid btnSecondary px-3" id="paintClear" type="button" ${state.validated ? "disabled" : ""}>مسح</button>
+            <button class="btnKid btnSecondary px-3" id="paintHint" type="button" ${hintUrl && !state.validated ? "" : "disabled"}>تلميح</button>
           </div>
 
           <div class="mt-3">
@@ -2610,7 +3250,7 @@ async function renderColoring(entry){
 
   $("#paintPalette").html(
     palette.map((c,i)=>`
-      <div class="swatch" data-color="${esc(c)}" data-selected="${i===0?"1":"0"}" style="background:${esc(c)}"></div>
+      <div class="swatch ${state.validated ? "pe-none" : ""}" data-color="${esc(c)}" data-selected="${i===0?"1":"0"}" style="background:${esc(c)}"></div>
     `).join("")
   );
 
@@ -2661,7 +3301,6 @@ async function renderColoring(entry){
   };
 
   function pushUndo(){
-    // ensure we store a valid (already-masked) snapshot
     applyMaskToDrawing(dctx, mctx);
     const img = dctx.getImageData(0,0,cw,ch);
     state.paint.undo.push(img);
@@ -2677,7 +3316,6 @@ async function renderColoring(entry){
 
   function updateColorProgress(){
     if(!state.paint?.drawCtx || !state.paint?.maskCtx) return;
-    // always enforce mask before measuring
     applyMaskToDrawing(state.paint.drawCtx, state.paint.maskCtx);
 
     const pct = coverageFromMask(state.paint.drawCtx, state.paint.maskCtx);
@@ -2687,6 +3325,7 @@ async function renderColoring(entry){
   updateColorProgress();
 
   $("#paintPalette").off("click").on("click", ".swatch", function(){
+    if(state.validated) return;
     const c = $(this).attr("data-color");
     state.paint.color = c;
     $(".swatch").attr("data-selected","0");
@@ -2694,15 +3333,18 @@ async function renderColoring(entry){
   });
 
   $("#paintSize").off("input").on("input", function(){
+    if(state.validated) return;
     state.paint.size = Number(this.value);
     updateLabels();
   });
   $("#paintOpacity").off("input").on("input", function(){
+    if(state.validated) return;
     state.paint.opacity = Number(this.value);
     updateLabels();
   });
 
   $("#paintUndo").off("click").on("click", function(){
+    if(state.validated) return;
     const u = state.paint.undo;
     if(u.length <= 1) return;
     u.pop();
@@ -2711,6 +3353,7 @@ async function renderColoring(entry){
   });
 
   $("#paintClear").off("click").on("click", function(){
+    if(state.validated) return;
     pushUndo();
     dctx.clearRect(0,0,cw,ch);
     applyMaskToDrawing(dctx, mctx);
@@ -2720,6 +3363,7 @@ async function renderColoring(entry){
 
   $("#paintHint").off(".hint");
   $("#paintHint").on("pointerdown.hint", function(e){
+    if(state.validated) return;
     if(!hintUrl) return;
     e.preventDefault();
     $("#paintHintLayer").css("opacity","0.85");
@@ -2729,19 +3373,21 @@ async function renderColoring(entry){
     $("#paintHintLayer").css("opacity","0");
   });
 
-  installPointerDraw({
-    canvas: drawCanvas,
-    ctx: dctx,
-    getStrokeStyle: () => ({
-      color: state.paint.color,
-      size: state.paint.size,
-      opacity: state.paint.opacity,
-      composite: "source-over"
-    }),
-    onStrokeStart: () => pushUndo(),
-    onDraw: () => applyMaskToDrawing(dctx, mctx),
-    onEnd: () => updateColorProgress()
-  });
+  if(!state.validated){
+    installPointerDraw({
+      canvas: drawCanvas,
+      ctx: dctx,
+      getStrokeStyle: () => ({
+        color: state.paint.color,
+        size: state.paint.size,
+        opacity: state.paint.opacity,
+        composite: "source-over"
+      }),
+      onStrokeStart: () => pushUndo(),
+      onDraw: () => applyMaskToDrawing(dctx, mctx),
+      onEnd: () => updateColorProgress()
+    });
+  }
 }
 
 /* TRACE */
@@ -2793,12 +3439,12 @@ async function renderTrace(entry){
             <span class="pill">سمك القلم</span>
             <span class="pill" id="traceSizeVal">—</span>
           </div>
-          <input class="form-range mt-2" id="traceSize" type="range" min="6" max="44" step="1" value="18">
+          <input class="form-range mt-2" id="traceSize" type="range" min="6" max="44" step="1" value="18" ${state.validated ? "disabled" : ""}>
         </div>
 
         <div class="d-flex gap-2 flex-wrap mt-3">
-          <button class="btnKid btnSecondary px-3" id="traceUndo" type="button">تراجع</button>
-          <button class="btnKid btnSecondary px-3" id="traceClear" type="button">مسح</button>
+          <button class="btnKid btnSecondary px-3" id="traceUndo" type="button" ${state.validated ? "disabled" : ""}>تراجع</button>
+          <button class="btnKid btnSecondary px-3" id="traceClear" type="button" ${state.validated ? "disabled" : ""}>مسح</button>
         </div>
 
         <div class="mt-3" style="color:rgba(15,23,42,.62);font-weight:900;line-height:1.7;">
@@ -2852,11 +3498,13 @@ async function renderTrace(entry){
   updateLabels();
 
   $("#traceSize").off("input").on("input", function(){
+    if(state.validated) return;
     state.trace.size = Number(this.value);
     updateLabels();
   });
 
   $("#traceUndo").off("click").on("click", function(){
+    if(state.validated) return;
     const u = state.trace.undo;
     if(u.length <= 1) return;
     u.pop();
@@ -2864,22 +3512,25 @@ async function renderTrace(entry){
   });
 
   $("#traceClear").off("click").on("click", function(){
+    if(state.validated) return;
     pushUndo();
     dctx.clearRect(0,0,draw.width, draw.height);
     pushUndo();
   });
 
-  installPointerDraw({
-    canvas: draw,
-    ctx: dctx,
-    getStrokeStyle: () => ({
-      color: "rgba(59,130,246,0.95)",
-      size: state.trace.size,
-      opacity: 1,
-      composite: "source-over"
-    }),
-    onStrokeStart: () => pushUndo()
-  });
+  if(!state.validated){
+    installPointerDraw({
+      canvas: draw,
+      ctx: dctx,
+      getStrokeStyle: () => ({
+        color: "rgba(59,130,246,0.95)",
+        size: state.trace.size,
+        opacity: 1,
+        composite: "source-over"
+      }),
+      onStrokeStart: () => pushUndo()
+    });
+  }
 }
 
 function renderUnsupported(entry){
@@ -2895,24 +3546,34 @@ function renderUnsupported(entry){
 }
 
 /* =========================================================
-  VALIDATION
+  VALIDATION (UPDATED)
+  - Only lock UI (state.validated = true) when CORRECT
+  - On WRONG: keep validated=false so user can answer immediately
 ========================================================= */
 function validate(){
   const entry = curEntry();
   const q = entry?.q || {};
   const type = String(q.type||"");
 
+  // default: do NOT lock. Lock only if correct.
+  state.validated = false;
+
   if(type === "multiple_choice" || type === "listen_choose"){
     if(!state.q.selected){
       feedback(false, "اختر إجابة أولًا", $stage());
+      render();
       return;
     }
     const ok = String(state.q.selected) === String(q?.answer?.choiceId);
     if(ok){
+      state.validated = true;
       feedback(true, "إجابة صحيحة", $(`[data-choice="${CSS.escape(state.q.selected)}"]`));
+      render();
       setTimeout(nextQ, 520);
     }else{
+      state.validated = false;
       feedback(false, "جرّب مرة أخرى", $(`[data-choice="${CSS.escape(state.q.selected)}"]`));
+      render();
     }
     return;
   }
@@ -2924,8 +3585,16 @@ function validate(){
     for(const p of expected){
       if(String(got[p.leftId]) !== String(p.rightId)){ ok=false; break; }
     }
-    feedback(ok, ok ? "تطابق صحيح" : "بعض التطابقات غير صحيحة", $stage());
-    if(ok) setTimeout(nextQ, 520);
+    if(ok){
+      state.validated = true;
+      feedback(true, "تطابق صحيح", $stage());
+      render();
+      setTimeout(nextQ, 520);
+    }else{
+      state.validated = false;
+      feedback(false, "بعض التطابقات غير صحيحة", $stage());
+      render();
+    }
     return;
   }
 
@@ -2940,8 +3609,16 @@ function validate(){
       const dragId   = String(a.dragId);
       if(String(got[targetId]) !== dragId){ ok=false; break; }
     }
-    feedback(ok, ok ? "توزيع صحيح" : "جرّب مرة أخرى", $stage());
-    if(ok) setTimeout(nextQ, 520);
+    if(ok){
+      state.validated = true;
+      feedback(true, "توزيع صحيح", $stage());
+      render();
+      setTimeout(nextQ, 520);
+    }else{
+      state.validated = false;
+      feedback(false, "جرّب مرة أخرى", $stage());
+      render();
+    }
     return;
   }
 
@@ -2949,8 +3626,16 @@ function validate(){
     const expected = Array.isArray(q.answer?.orderedIds) ? q.answer.orderedIds.map(String) : [];
     const got = (state.q.order||[]).map(String);
     const ok = expected.length && expected.length === got.length && expected.every((v,i)=>v===got[i]);
-    feedback(ok, ok ? "ترتيب صحيح" : "الترتيب غير صحيح", $stage());
-    if(ok) setTimeout(nextQ, 520);
+    if(ok){
+      state.validated = true;
+      feedback(true, "ترتيب صحيح", $stage());
+      render();
+      setTimeout(nextQ, 520);
+    }else{
+      state.validated = false;
+      feedback(false, "الترتيب غير صحيح", $stage());
+      render();
+    }
     return;
   }
 
@@ -2965,8 +3650,16 @@ function validate(){
       const catId  = String(a.categoryId);
       if(String(got[itemId]) !== catId){ ok=false; break; }
     }
-    feedback(ok, ok ? "تصنيف صحيح" : "بعض العناصر في فئة خاطئة", $stage());
-    if(ok) setTimeout(nextQ, 520);
+    if(ok){
+      state.validated = true;
+      feedback(true, "تصنيف صحيح", $stage());
+      render();
+      setTimeout(nextQ, 520);
+    }else{
+      state.validated = false;
+      feedback(false, "بعض العناصر في فئة خاطئة", $stage());
+      render();
+    }
     return;
   }
 
@@ -2977,39 +3670,67 @@ function validate(){
       .map(id => tiles.find(t => String(t.id)===String(id)))
       .filter(Boolean).map(t=>pickText(t)).join("");
     const ok = norm(built) === target;
-    feedback(ok, ok ? "الكلمة صحيحة" : "جرّب مرة أخرى", $stage());
-    if(ok) setTimeout(nextQ, 520);
+    if(ok){
+      state.validated = true;
+      feedback(true, "الكلمة صحيحة", $stage());
+      render();
+      setTimeout(nextQ, 520);
+    }else{
+      state.validated = false;
+      feedback(false, "جرّب مرة أخرى", $stage());
+      render();
+    }
     return;
   }
 
   if(type === "coloring"){
     if(!state.paint?.drawCtx || !state.paint?.maskCtx){
       feedback(false, "تعذر تحميل لوحة التلوين", $stage());
+      render();
       return;
     }
-    // enforce mask before checking
     applyMaskToDrawing(state.paint.drawCtx, state.paint.maskCtx);
 
     const pct = coverageFromMask(state.paint.drawCtx, state.paint.maskCtx);
     const ok = pct >= Number(state.paint.requiredCoverage || 0.6);
-    feedback(ok, ok ? `ممتاز (${(pct*100).toFixed(0)}%)` : `لوّن أكثر (${(pct*100).toFixed(0)}%)`, $("#paintDraw"));
-    if(ok) setTimeout(nextQ, 520);
+
+    if(ok){
+      state.validated = true;
+      feedback(true, `ممتاز (${(pct*100).toFixed(0)}%)`, $("#paintDraw"));
+      render();
+      setTimeout(nextQ, 520);
+    }else{
+      state.validated = false;
+      feedback(false, `لوّن أكثر (${(pct*100).toFixed(0)}%)`, $("#paintDraw"));
+      render();
+    }
     return;
   }
 
   if(type === "trace_write"){
     if(!state.trace?.drawCtx){
       feedback(false, "تعذر تحميل لوحة الكتابة", $stage());
+      render();
       return;
     }
     const ink = countNonTransparentPixels(state.trace.drawCtx);
     const ok = ink >= state.trace.minInkPixels;
-    feedback(ok, ok ? "كتابة ممتازة" : "اكتب أكثر فوق القالب", $("#traceDraw"));
-    if(ok) setTimeout(nextQ, 520);
+
+    if(ok){
+      state.validated = true;
+      feedback(true, "كتابة ممتازة", $("#traceDraw"));
+      render();
+      setTimeout(nextQ, 520);
+    }else{
+      state.validated = false;
+      feedback(false, "اكتب أكثر فوق القالب", $("#traceDraw"));
+      render();
+    }
     return;
   }
 
   feedback(false, "هذا النوع غير مدعوم", $stage());
+  render();
 }
 
 /* =========================================================
@@ -3051,9 +3772,7 @@ async function render(){
   setStageMode(isChoiceType ? "choice" : "default");
 
   fitStageToViewport();
-  if(isChoiceType){
-    fitChoiceCardsHard();
-  }
+  if(isChoiceType) fitChoiceCardsHard();
 
   const fn = RENDERERS[type];
   if(!fn) return renderUnsupported(entry);
@@ -3065,6 +3784,7 @@ async function render(){
 ========================================================= */
 async function load(){
   try{
+    ensurePopup(); // ready early
     resetQ();
     $stage().text("جاري التحميل...");
 
@@ -3079,7 +3799,7 @@ async function load(){
     if(!sec) throw new Error(`لا يوجد section=${sectionId}`);
     if(!les) throw new Error(`لا يوجد lesson=${lessonId}`);
 
-    // ✅ RANDOMIZE (SAFE) — shuffle question bank + per-item flow + internal options
+    // Optional randomize (keep if you want)
     les.interactive = randomizeInteractive(les.interactive);
 
     state.data = data;
@@ -3087,7 +3807,8 @@ async function load(){
     state.section = sec;
     state.lesson = les;
 
-    state.flow = buildFlow(les);
+    // ✅ IMPORTANT: fetch ALL questions for this lesson
+    state.flow = buildFlowAllQuestions(les);
     state.idx = 0;
 
     await render();
@@ -3119,7 +3840,20 @@ async function load(){
 
 /* =========================================================
   INIT
-========================================================= */
+========================================================= */function syncViewportVars(){
+  const vvh = window.visualViewport?.height || window.innerHeight;
+  document.documentElement.style.setProperty("--vvh", vvh + "px");
+
+  const topBar = document.querySelector(".topBar");
+  const topH = topBar ? topBar.getBoundingClientRect().height : 0;
+  document.documentElement.style.setProperty("--topBarH", topH + "px");
+}
+
+window.addEventListener("resize", syncViewportVars);
+window.visualViewport?.addEventListener("resize", syncViewportVars);
+window.visualViewport?.addEventListener("scroll", syncViewportVars);
+syncViewportVars();
+
 load();
 </script>
 
